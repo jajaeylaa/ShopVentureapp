@@ -1,0 +1,2549 @@
+<!DOCTYPE html>
+<html lang="ms" id="html-root">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title data-translate="title">Smart Cilik Market</title>
+  
+  <!-- Pautan Manifest untuk PWA -->
+  <link rel="manifest" href="manifest.json">
+
+  <!-- Font Tempatan / Fallback Sistem -->
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600;700&display=swap');
+  </style>
+
+  <!-- Pustaka Luar Disimpan Secara Lokal -->
+  <script src="html5-qrcode.min.js" type="text/javascript"></script>
+  <script src="JsBarcode.all.min.js"></script>
+  <script src="peerjs.min.js"></script>
+  <script src="qrcode.min.js"></script>
+
+  <style>
+    * { 
+      box-sizing: border-box; 
+      font-family: 'Fredoka', 'Comic Sans MS', cursive, sans-serif; 
+    }
+    
+    body { 
+      background: linear-gradient(135deg, #e0f2fe 0%, #fef3c7 50%, #fce7f3 100%);
+      margin: 0; 
+      padding: 15px; 
+      color: #1e293b; 
+      min-height: 100vh;
+    }
+
+    /* BANNER SHIELD AKTIFKAN AUDIO DESAIN KHAS SAFARI & MOBILE */
+    #audio-activate-banner {
+      background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+      color: white;
+      text-align: center;
+      padding: 10px 15px;
+      border-radius: 16px;
+      margin-bottom: 12px;
+      font-weight: bold;
+      font-size: 14px;
+      box-shadow: 0 4px 12px rgba(217, 119, 6, 0.3);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+    }
+    #audio-activate-banner button {
+      background: white;
+      color: #b45309;
+      border: none;
+      padding: 6px 14px;
+      border-radius: 12px;
+      font-weight: 800;
+      cursor: pointer;
+      font-size: 13px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+    }
+    
+    /* TAJUK & BUTANG HEADER ICONS */
+    .header-box { 
+      text-align: center; 
+      margin-bottom: 20px; 
+      padding: 10px 0;
+      position: relative;
+    }
+
+    .header-actions {
+      position: absolute;
+      right: 10px;
+      top: 0px;
+      display: flex;
+      gap: 8px;
+      align-items: center;
+    }
+
+    .btn-header-icon {
+      background: white;
+      border: 3px solid #0284c7;
+      border-radius: 50%;
+      width: 50px;
+      height: 50px;
+      font-size: 22px;
+      cursor: pointer;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+      transition: all 0.2s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .btn-header-icon:hover {
+      transform: scale(1.1);
+      background: #e0f2fe;
+    }
+    .btn-setting-icon:hover {
+      transform: rotate(90deg) scale(1.1);
+    }
+
+    h1.colorful-title { 
+      margin: 0; 
+      font-size: 38px; 
+      font-weight: 700;
+      letter-spacing: 2px;
+      display: inline-block;
+      animation: float 3s ease-in-out infinite;
+    }
+    
+    @keyframes float {
+      0%, 100% { transform: translateY(0px); }
+      50% { transform: translateY(-6px); }
+    }
+
+    .colorful-title span {
+      display: inline-block;
+      text-shadow: 2px 2px 0px #ffffff, 4px 4px 0px rgba(0,0,0,0.1);
+    }
+    
+    .c-red    { color: #ff4757; }
+    .c-blue   { color: #1e90ff; }
+    .c-green  { color: #2ed573; }
+    .c-yellow { color: #ffa502; }
+    .c-orange { color: #ff6b81; }
+    .c-purple { color: #9b59b6; }
+    .c-pink   { color: #ff78ae; }
+
+    .subtitle { 
+      font-size: 15px; 
+      color: #0284c7; 
+      font-weight: 700; 
+      margin-top: 5px; 
+      letter-spacing: 2px;
+      background: #ffffff80;
+      display: inline-block;
+      padding: 4px 16px;
+      border-radius: 20px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+    }
+
+    /* MUKA SURAT LAYOUT */
+    .page-section { display: none; }
+    .page-section.active { display: block; }
+
+    .layout { 
+      display: flex; 
+      flex-wrap: wrap; 
+      gap: 20px; 
+      max-width: 1100px; 
+      margin: 0 auto; 
+    }
+    
+    .panel { 
+      background: rgba(255, 255, 255, 0.95); 
+      border-radius: 28px; 
+      padding: 20px; 
+      box-shadow: 0 12px 25px rgba(0,0,0,0.08); 
+      flex: 1; 
+      min-width: 320px; 
+      border: 4px solid #ffffff;
+    }
+
+    .panel-single {
+      max-width: 1000px;
+      margin: 0 auto;
+      width: 100%;
+    }
+
+    /* LAYOUT SETTING 2 KOLUM BERSEBELAHAN */
+    .setting-grid-container {
+      display: grid;
+      grid-template-columns: 1.1fr 0.9fr;
+      gap: 20px;
+      align-items: start;
+    }
+
+    @media (max-width: 850px) {
+      .setting-grid-container {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .setting-col {
+      background: #f8fafc;
+      border: 2px solid #e2e8f0;
+      border-radius: 24px;
+      padding: 18px;
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+    }
+
+    /* LAYOUT BAHAGIAN BAYARAN 2 KOLUM */
+    .bayaran-grid-container {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+      margin-top: 15px;
+    }
+
+    @media (max-width: 768px) {
+      .bayaran-grid-container {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .bayaran-col {
+      background: #f8fafc;
+      border: 2px solid #e2e8f0;
+      border-radius: 20px;
+      padding: 15px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+    
+    h2, h3 { 
+      text-align: center; 
+      margin-top: 0; 
+      color: #0284c7; 
+      font-size: 22px;
+    }
+
+    /* Grid Katalog Barangan */
+    .grid { 
+      display: grid; 
+      grid-template-columns: repeat(auto-fill, minmax(135px, 1fr)); 
+      gap: 12px; 
+      margin-bottom: 10px; 
+    }
+    
+    .item-card { 
+      background: #ffffff; 
+      border: 3px solid #7dd3fc; 
+      border-radius: 20px; 
+      padding: 12px; 
+      text-align: center; 
+      cursor: pointer; 
+      transition: all 0.2s ease;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.03);
+      position: relative;
+    }
+    .item-card:hover { 
+      transform: translateY(-4px); 
+      box-shadow: 0 8px 18px rgba(56, 189, 248, 0.25);
+      border-color: #0284c7;
+    }
+    .item-card.coupon-card { 
+      border-color: #fcd34d; 
+      background: #fffbeb; 
+    }
+    .item-card.out-of-stock {
+      opacity: 0.55;
+      filter: grayscale(0.8);
+      border-color: #cbd5e1;
+      cursor: not-allowed;
+    }
+    .item-card:active { transform: scale(0.95); }
+    
+    .item-img { 
+      width: 60px; 
+      height: 60px; 
+      object-fit: contain; 
+      margin-bottom: 4px; 
+    }
+    .item-name { 
+      font-size: 14px; 
+      font-weight: 700; 
+      color: #334155;
+      display: block;
+    }
+    
+    .item-price { 
+      background: #22c55e; 
+      color: white; 
+      font-weight: bold; 
+      padding: 2px 8px; 
+      border-radius: 10px; 
+      display: inline-block;
+      font-size: 12px;
+      margin-top: 2px;
+    }
+    .coupon-price { 
+      background: #f59e0b; 
+      color: white; 
+      font-weight: bold; 
+      padding: 2px 8px; 
+      border-radius: 10px; 
+      display: inline-block;
+      font-size: 12px;
+      margin-top: 2px;
+    }
+    
+    .stock-badge {
+      font-size: 11px;
+      font-weight: bold;
+      color: #0284c7;
+      background: #e0f2fe;
+      padding: 2px 6px;
+      border-radius: 8px;
+      margin-top: 4px;
+      display: block;
+    }
+    .stock-badge.empty {
+      color: #dc2626;
+      background: #fee2e2;
+    }
+
+    .barcode-display { 
+      margin-top: 6px; 
+      background: white; 
+      padding: 3px; 
+      border-radius: 8px; 
+      border: 1px solid #e2e8f0;
+    }
+    .barcode-display svg { width: 100%; height: 32px; }
+
+    #reader { 
+      width: 100%; 
+      border-radius: 20px; 
+      overflow: hidden; 
+      border: 3px dashed #0284c7; 
+      margin-bottom: 12px; 
+      min-height: 200px; 
+      background: #000; 
+      display: none; 
+    }
+    .cam-controls { display: flex; gap: 10px; margin-bottom: 12px; }
+
+    .cart-list { 
+      background: #f8fafc; 
+      border-radius: 18px; 
+      padding: 12px; 
+      min-height: 140px; 
+      max-height: 250px; 
+      overflow-y: auto; 
+      font-size: 14px; 
+      border: 2px solid #e2e8f0;
+    }
+    .cart-item { 
+      display: flex; 
+      justify-content: space-between; 
+      align-items: center; 
+      margin-bottom: 8px; 
+      background: white; 
+      padding: 10px 14px; 
+      border-radius: 14px; 
+      box-shadow: 0 2px 6px rgba(0,0,0,0.03); 
+    }
+    .cart-item.coupon-item { 
+      background: #fffbeb; 
+      border: 1.5px dashed #f59e0b; 
+    }
+    .cart-item-info { display: flex; align-items: center; gap: 12px; }
+    .cart-item-img { width: 52px; height: 52px; object-fit: contain; }
+    
+    .qty-badge {
+      background: #0284c7;
+      color: white;
+      font-weight: bold;
+      font-size: 12px;
+      padding: 2px 8px;
+      border-radius: 12px;
+      margin-left: 5px;
+    }
+
+    .btn-delete-item {
+      background: #fee2e2;
+      color: #ef4444;
+      border: 1.5px solid #fca5a5;
+      border-radius: 8px;
+      padding: 4px 8px;
+      font-size: 12px;
+      font-weight: bold;
+      cursor: pointer;
+      margin-left: 8px;
+    }
+
+    .total-display { 
+      font-size: 22px; 
+      text-align: center; 
+      color: #0284c7; 
+      margin: 10px 0; 
+      background: #e0f2fe; 
+      padding: 10px; 
+      border-radius: 16px; 
+      font-weight: 700; 
+    }
+    .paid-display { 
+      font-size: 20px; 
+      text-align: center; 
+      color: #b45309; 
+      margin: 8px 0; 
+      background: #fef3c7; 
+      padding: 10px; 
+      border-radius: 16px; 
+      font-weight: 700; 
+    }
+
+    .display-row {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+
+    .btn-audio-inline {
+      background: white;
+      border: 2px solid #0284c7;
+      color: #0284c7;
+      border-radius: 50%;
+      width: 38px;
+      height: 38px;
+      font-size: 18px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s ease;
+      box-shadow: 0 3px 8px rgba(0,0,0,0.1);
+      flex-shrink: 0;
+    }
+    .btn-audio-inline:hover {
+      transform: scale(1.1);
+      background: #e0f2fe;
+    }
+
+    .change-live-box {
+      font-size: 20px;
+      font-weight: 700;
+      text-align: center;
+      padding: 10px;
+      border-radius: 16px;
+      margin: 8px 0;
+      background-color: #f1f5f9;
+      color: #64748b;
+      border: 2px solid #cbd5e1;
+      flex: 1;
+    }
+    .change-live-box.sufficient {
+      background-color: #dcfce7;
+      color: #15803d;
+      border: 3px solid #22c55e;
+    }
+    .change-live-box.insufficient {
+      background-color: #fee2e2;
+      color: #b91c1c;
+      border: 3px dashed #ef4444;
+    }
+
+    .visual-money-box {
+      background: #ffffff;
+      border: 2px dashed #38bdf8;
+      border-radius: 16px;
+      padding: 10px;
+      margin: 10px 0;
+      text-align: center;
+      min-height: 70px;
+      transition: all 0.3s ease;
+    }
+    .visual-money-box.hidden-mode {
+      display: none !important;
+    }
+
+    .visual-money-title {
+      font-size: 13px;
+      font-weight: 700;
+      color: #0369a1;
+      margin-bottom: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+    }
+    .visual-money-grid {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      align-items: center;
+      gap: 8px;
+    }
+    .money-note-img {
+      height: 48px;
+      border-radius: 6px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+      transition: transform 0.2s ease;
+      animation: popIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+
+    @keyframes popIn {
+      0% { transform: scale(0); opacity: 0; }
+      100% { transform: scale(1); opacity: 1; }
+    }
+
+    .money-grid { display: flex; justify-content: center; gap: 10px; flex-wrap: wrap; margin-bottom: 12px; }
+    .btn-money { 
+      background: #ffffff; 
+      border: 3px solid #e2e8f0; 
+      border-radius: 16px; 
+      padding: 6px 10px; 
+      cursor: pointer; 
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s ease;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+      flex: 1;
+      min-width: 80px;
+    }
+    .btn-money:hover { transform: translateY(-3px) scale(1.05); border-color: #0284c7; }
+    .money-img { width: 85px; height: 42px; object-fit: cover; border-radius: 6px; border: 1px solid #cbd5e1; }
+    .money-text { font-size: 13px; font-weight: 800; color: #1e293b; margin-top: 4px; }
+
+    .btn-action { 
+      width: 100%; 
+      padding: 12px; 
+      font-size: 18px; 
+      font-weight: 700; 
+      color: white; 
+      border: none; 
+      border-radius: 16px; 
+      cursor: pointer; 
+      margin-top: 8px; 
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+    .btn-scan { background: linear-gradient(135deg, #38bdf8 0%, #0284c7 100%); }
+    .btn-switch { background: linear-gradient(135deg, #fbbf24 0%, #d97706 100%); display: none; }
+    .btn-next-page { background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%); font-size: 20px; }
+    .btn-back-page { background: linear-gradient(135deg, #64748b 0%, #334155 100%); font-size: 16px; width: auto; padding: 8px 16px; margin: 0; }
+    .btn-voice { background: linear-gradient(135deg, #a855f7 0%, #7e22ce 100%); }
+    .btn-pay { background: linear-gradient(135deg, #4ade80 0%, #16a34a 100%); font-size: 20px; }
+    .btn-reset { background: linear-gradient(135deg, #f87171 0%, #dc2626 100%); }
+
+    .setting-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 5px;
+      font-size: 13px;
+    }
+    .setting-table th, .setting-table td {
+      padding: 8px 5px;
+      border-bottom: 1px solid #e2e8f0;
+      text-align: center;
+    }
+    .setting-table th {
+      background: #e0f2fe;
+      color: #0284c7;
+    }
+    .btn-qty-control {
+      background: #0284c7;
+      color: white;
+      border: none;
+      width: 26px;
+      height: 26px;
+      border-radius: 8px;
+      font-size: 15px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+    .input-stock {
+      width: 50px;
+      text-align: center;
+      padding: 4px;
+      font-size: 14px;
+      border-radius: 8px;
+      border: 1px solid #cbd5e1;
+      font-weight: bold;
+    }
+
+    .overlay { 
+      display: none; 
+      position: fixed; 
+      top:0; left:0; 
+      width:100%; height:100%; 
+      background: rgba(15, 23, 42, 0.6); 
+      backdrop-filter: blur(4px);
+      justify-content: center; 
+      align-items: center; 
+      z-index: 1000; 
+    }
+    .modal-box { 
+      background: white; 
+      padding: 25px; 
+      border-radius: 30px; 
+      text-align: center; 
+      max-width: 420px; 
+      width: 90%; 
+    }
+    .receipt-box { border: 5px dashed #0284c7; }
+    .warning-box { border: 5px solid #ef4444; background: #fff5f5; }
+    .big-change-card {
+      background: #dcfce7;
+      border: 4px solid #22c55e;
+      border-radius: 20px;
+      padding: 15px;
+      margin: 12px 0;
+    }
+    .big-change-amount { font-size: 42px; font-weight: 700; color: #15803d; }
+
+    .btn-mode {
+      background: #ffffff;
+      border: 2px solid #cbd5e1;
+      padding: 6px 14px;
+      border-radius: 16px;
+      font-weight: 700;
+      font-size: 13px;
+      cursor: pointer;
+      color: #64748b;
+      transition: all 0.2s ease;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+    }
+    .btn-mode.active {
+      border-color: #0284c7;
+      background: #0284c7;
+      color: white;
+      box-shadow: 0 4px 10px rgba(2, 132, 199, 0.3);
+      transform: scale(1.03);
+    }
+
+    /* SKRIN STYLES CUSTOMER DISPLAY */
+    #customer-display-screen {
+      display: none;
+      position: fixed;
+      top: 0; left: 0; width: 100vw; height: 100vh;
+      background: #f0f9ff;
+      z-index: 9999;
+      flex-direction: column;
+      padding: 20px;
+      box-sizing: border-box;
+      overflow-y: auto;
+    }
+
+    /* PRINTABLE BARCODE SHEET STYLES */
+    #printable-barcode-screen {
+      display: none;
+      position: fixed;
+      top: 0; left: 0; width: 100vw; height: 100vh;
+      background: #ffffff;
+      z-index: 99999;
+      padding: 30px;
+      box-sizing: border-box;
+      overflow-y: auto;
+    }
+    .print-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 20px;
+      max-width: 800px;
+      margin: 0 auto;
+    }
+    .print-card {
+      border: 3px dashed #0284c7;
+      border-radius: 20px;
+      padding: 15px;
+      text-align: center;
+      background: #f8fafc;
+    }
+    @media print {
+      body * { visibility: hidden; }
+      #printable-barcode-screen, #printable-barcode-screen * { visibility: visible; }
+      #printable-barcode-screen { position: absolute; left: 0; top: 0; width: 100%; padding: 10px; }
+      .no-print { display: none !important; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- BANNER UNTUK HILANGKAN SEKATAN AUDIO SAFARI / MOBILE CHROME -->
+  <div id="audio-activate-banner">
+    <span data-translate="banner_audio">🔊 Tekan butang ini untuk aktifkan audio & suara peranti (Sangat Penting untuk iPhone/iPad/Safari):</span>
+    <button onclick="aktifkanAudioPenuhPeranti()" data-translate="btn_activate_audio">Aktifkan Audio</button>
+  </div>
+
+  <!-- MODAL BUKA KOD QR / SAMBUNGAN MANUAL -->
+  <div class="overlay" id="displayConnectModal">
+    <div class="modal-box" style="border: 4px solid #0284c7; max-width: 450px;">
+      <h2 style="color: #0284c7; margin-bottom: 5px;">📱 Customer Display Phone</h2>
+      <p style="font-size: 13px; color: #475569; margin-top: 0;" data-translate="modal_connect_desc">Imbas Kod QR di bawah, <b>atau</b> buka fail ini di phone & masukkan ID Manual:</p>
+      
+      <div id="display-qrcode" style="display: flex; justify-content: center; margin: 15px 0;"></div>
+      
+      <div style="background: #e0f2fe; padding: 10px; border-radius: 12px; margin-bottom: 10px; border: 1px dashed #0284c7;">
+        <span style="font-size: 12px; color: #0369a1; font-weight: bold;" data-translate="manual_id_label">ID SAMBUNGAN MANUAL TABLET:</span>
+        <div id="manual-peer-id" style="font-size: 24px; font-weight: 800; color: #0284c7; letter-spacing: 2px;">Memuatkan...</div>
+      </div>
+
+      <p id="display-status-text" style="font-size: 12px; font-weight: bold; color: #d97706;" data-translate="waiting_conn">Menunggu sambungan telefon...</p>
+
+      <button class="btn-action btn-reset" onclick="tutupModalDisplay()" style="font-size: 14px; padding: 8px;" data-translate="close_btn">Tutup</button>
+    </div>
+  </div>
+
+  <!-- CONTAINER UTAMA POS TABLET -->
+  <div id="main-pos-app">
+    <div class="header-box">
+      <!-- CONTAINER BUTANG HEADER (FULLSCREEN & SETTING) -->
+      <div class="header-actions">
+        <button class="btn-header-icon" id="btn-fullscreen-toggle" onclick="toggleFullScreen()" title="Skrin Penuh (Fullscreen)">⛶</button>
+        <button class="btn-header-icon btn-setting-icon" onclick="semakDanBukaSetting()" title="Tetapan Stok Guru/Ibu Bapa">⚙️</button>
+      </div>
+
+      <h1 class="colorful-title">
+        <span class="c-red">S</span><span class="c-blue">m</span><span class="c-green">a</span><span class="c-yellow">r</span><span class="c-orange">t</span> 
+        <span class="c-purple">C</span><span class="c-pink">i</span><span class="c-red">l</span><span class="c-blue">i</span><span class="c-green">k</span> 
+        <span class="c-orange">M</span><span class="c-purple">a</span><span class="c-pink">r</span><span class="c-red">k</span><span class="c-blue">e</span><span class="c-green">t</span> 🛒
+      </h1>
+      <br>
+      <div class="subtitle">by Jajaeyla</div>
+
+      <!-- PAPARAN PEMBERITAHUAN MOD AKTIF & BUTANG SAMBUNG PHONE -->
+      <div id="pemberitahuan-mod-page1" style="margin-top: 10px; display: flex; justify-content: center; align-items: center; gap: 8px; flex-wrap: wrap;">
+        <span id="badge-mod-visual-page1" style="background: #e0f2fe; color: #0369a1; border: 2px solid #38bdf8; padding: 5px 14px; border-radius: 20px; font-size: 13px; font-weight: bold; box-shadow: 0 3px 8px rgba(0,0,0,0.06); transition: all 0.3s ease;">
+          🖼️ Mod Visual
+        </span>
+        <span id="badge-mod-kiraan-page1" style="background: #f0fdf4; color: #15803d; border: 2px solid #4ade80; padding: 5px 14px; border-radius: 20px; font-size: 13px; font-weight: bold; box-shadow: 0 3px 8px rgba(0,0,0,0.06); transition: all 0.3s ease;">
+          🌱 Mod Wang Tepat
+        </span>
+        <button id="btn-connect-phone" onclick="bukaModalDisplay()" style="background: #a855f7; color: white; border: none; padding: 6px 14px; border-radius: 20px; font-size: 13px; font-weight: bold; cursor: pointer; box-shadow: 0 3px 8px rgba(0,0,0,0.1);" data-translate="connect_phone_btn">
+          📱 Sambung Phone Pelanggan
+        </button>
+        <button onclick="bukaModPelangganManualUI()" style="background: #0284c7; color: white; border: none; padding: 6px 14px; border-radius: 20px; font-size: 13px; font-weight: bold; cursor: pointer; box-shadow: 0 3px 8px rgba(0,0,0,0.1);" data-translate="open_customer_screen_btn">
+          🖥️ Buka Skrin Pelanggan
+        </button>
+      </div>
+    </div>
+
+    <!-- ================= MUKA SURAT 1: KETIK / SCAN BARANG & TROLI ================= -->
+    <div id="page-kedai" class="page-section active">
+      <div class="layout">
+        <!-- PANEL KIRI: Imbasan Kamera & Katalog Barangan -->
+        <div class="panel">
+          <h3 data-translate="sec1_title">1. Imbas Kamera / Pilih Barang 🛍️</h3>
+          
+          <div class="cam-controls">
+            <button class="btn-action btn-scan" id="camBtn" onclick="toggleCamera()" data-translate="open_cam_btn">📷 Buka Kamera Gajet</button>
+            <button class="btn-action btn-switch" id="switchBtn" onclick="tukarKameraNext()" data-translate="switch_cam_btn">🔄 Tukar Kamera</button>
+          </div>
+          <div id="reader"></div>
+
+          <h4 style="margin: 10px 0 8px 0; color: #0284c7; text-align: center;" data-translate="catalog_heading">Ketik / Imbas Barangan & Kupon:</h4>
+          <div class="grid" id="katalog"></div>
+        </div>
+
+        <!-- PANEL KANAN: Paparan Troli & Ringkasan -->
+        <div class="panel">
+          <h3 data-translate="cart_title">🛒 Troli Barangan</h3>
+          
+          <div class="cart-list" id="cart">
+            <p style="text-align: center; color: #94a3b8; margin-top: 35px;" data-translate="empty_cart">Belum ada barang dipilih...</p>
+          </div>
+
+          <div class="display-row">
+            <div class="total-display" style="flex: 1;"><span data-translate="total_price_label">Jumlah Harga</span>: RM <span id="total-val">0</span></div>
+            <button class="btn-audio-inline" onclick="playKeypadSound(); sebutJumlahHarga()" title="Dengar Jumlah Harga">🔊</button>
+          </div>
+
+          <button class="btn-action btn-next-page" onclick="playKeypadSound(); bukaPageBayaran()" data-translate="goto_payment_btn">Ke Bahagian Bayaran ➡️</button>
+          <button class="btn-action btn-reset" onclick="playKeypadSound(); resetSemua()" data-translate="reset_btn">Reset / Kosongkan 🔄</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ================= MUKA SURAT 2: BAHAGIAN BAYARAN SAHAJA ================= -->
+    <div id="page-bayaran" class="page-section">
+      <div class="layout">
+        <div class="panel panel-single">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+            <button class="btn-action btn-back-page" onclick="playKeypadSound(); bukaPageKedai()" data-translate="back_to_cart_btn">⬅️ Kembali ke Troli</button>
+            <h2 style="margin: 0; color: #0284c7;" data-translate="payment_section_title">💳 Bahagian Bayaran</h2>
+            <div style="width: 100px;"></div>
+          </div>
+
+          <div class="display-row">
+            <div class="total-display" style="flex: 1; background: #e0f2fe; color: #0284c7; margin: 5px 0;">
+              <span data-translate="amount_to_pay">Jumlah Perlu Dibayar</span>: RM <span id="total-val-bayaran">0</span>
+            </div>
+            <button class="btn-audio-inline" onclick="playKeypadSound(); sebutJumlahHarga()" title="Dengar Jumlah Harga">🔊</button>
+          </div>
+
+          <!-- GRID 2 KOLUM: KIRI (JUMLAH WANG DITERIMA) | KANAN (BAKI PULANGAN) -->
+          <div class="bayaran-grid-container">
+            
+            <!-- KOLUM KIRI: JUMLAH WANG DITERIMA -->
+            <div class="bayaran-col">
+              <div>
+                <h3 style="margin-bottom: 10px; color: #b45309;" data-translate="money_received_title">💵 Jumlah Wang Diterima</h3>
+                
+                <div class="display-row">
+                  <div class="paid-display" style="flex: 1;">RM <span id="paid-val">0</span></div>
+                  <button class="btn-audio-inline" onclick="playKeypadSound(); sebutWangDiterima()" title="Dengar Wang Diterima">🔊</button>
+                </div>
+
+                <div class="visual-money-box" id="box-visual-inserted">
+                  <div class="visual-money-title" data-translate="visual_inserted_title">💵 Visual Wang Diterima:</div>
+                  <div id="visual-inserted-money" class="visual-money-grid">
+                    <span style="font-size: 12px; color: #94a3b8;" data-translate="no_money_inserted">Belum ada wang dimasukkan</span>
+                  </div>
+                </div>
+              </div>
+
+              <div>
+                <h4 style="margin: 10px 0 6px 0; text-align: center; color: #0284c7;" data-translate="insert_cash_heading">Masukkan Duit Kertas:</h4>
+                <div class="money-grid">
+                  <button class="btn-money" onclick="tambahWang(1)">
+                    <img src="wang-rm1.png" alt="RM1" class="money-img" onerror="this.src='https://via.placeholder.com/105x52/3b82f6/ffffff?text=RM1'">
+                    <span class="money-text">+ RM1</span>
+                  </button>
+                  
+                  <button class="btn-money" onclick="tambahWang(5)">
+                    <img src="wang-rm5.png" alt="RM5" class="money-img" onerror="this.src='https://via.placeholder.com/105x52/22c55e/ffffff?text=RM5'">
+                    <span class="money-text">+ RM5</span>
+                  </button>
+                  
+                  <button class="btn-money" onclick="tambahWang(10)">
+                    <img src="wang-rm10.png" alt="RM10" class="money-img" onerror="this.src='https://via.placeholder.com/105x52/ef4444/ffffff?text=RM10'">
+                    <span class="money-text">+ RM10</span>
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <!-- KOLUM KANAN: BAKI PULANGAN & TINDAKAN -->
+            <div class="bayaran-col">
+              <div>
+                <h3 style="margin-bottom: 10px; color: #15803d;" data-translate="change_title">🎉 Baki Pulangan</h3>
+                
+                <div class="display-row">
+                  <div class="change-live-box" id="live-change-box" data-translate="change_zero">
+                    Baki: RM 0
+                  </div>
+                  <button class="btn-audio-inline" onclick="playKeypadSound(); sebutBakiPulangan()" title="Dengar Baki Pulangan">🔊</button>
+                </div>
+
+                <div class="visual-money-box" id="box-visual-change" style="border-color: #22c55e;">
+                  <div class="visual-money-title" style="color: #15803d;" data-translate="visual_change_title">🎉 Visual Baki Pulangan:</div>
+                  <div id="visual-change-money" class="visual-money-grid">
+                    <span style="font-size: 12px; color: #94a3b8;" data-translate="no_change">Tiada baki pulangan</span>
+                  </div>
+                </div>
+              </div>
+
+              <div style="margin-top: 15px;">
+                <button class="btn-action btn-pay" onclick="prosesBayaran()" data-translate="complete_pay_btn">Selesai & Bayar 💵</button>
+                <button class="btn-action btn-reset" onclick="playKeypadSound(); resetBayaranSahaja()" data-translate="reset_payment_btn">Reset Duit Bayaran 🔄</button>
+              </div>
+            </div>
+
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <!-- ================= MUKA SURAT 3: SETTING & PENGURUSAN STOK (LAYOUT BERSEBELAHAN) ================= -->
+    <div id="page-setting" class="page-section">
+      <div class="layout">
+        <div class="panel panel-single">
+          <h2 style="margin-bottom: 15px;" data-translate="setting_main_title">⚙️ Tetapan & Kawalan Kedai</h2>
+
+          <!-- GRID 2 KOLUM BERSEBELAHAN: KIRI (STOK & BARANG) | KANAN (MOD & KAWALAN) -->
+          <div class="setting-grid-container">
+            
+            <!-- KOLUM KIRI: PENGURUSAN STOK & TAMBAH BARANG -->
+            <div class="setting-col">
+              <div>
+                <h3 style="margin-bottom: 5px; color: #0284c7; text-align: left;" data-translate="stock_mgmt_title">📦 Pengurusan Stok Barangan</h3>
+                <p style="color: #64748b; font-size: 13px; margin: 0 0 10px 0;" data-translate="stock_mgmt_desc">Kemaskini bilangan stok barangan dan kupon.</p>
+
+                <div style="max-height: 280px; overflow-y: auto; border: 1px solid #e2e8f0; border-radius: 12px; background: white;">
+                  <table class="setting-table">
+                    <thead>
+                      <tr>
+                        <th style="text-align: left;" data-translate="table_product">Produk</th>
+                        <th data-translate="table_price">Harga</th>
+                        <th data-translate="table_stock">Stok</th>
+                      </tr>
+                    </thead>
+                    <tbody id="setting-stock-list"></tbody>
+                  </table>
+                </div>
+
+                <div style="text-align: center; margin-top: 10px; display: flex; gap: 8px; justify-content: center; flex-wrap: wrap;">
+                  <button class="btn-action btn-switch" onclick="playKeypadSound(); resetSemuaStokKe10()" style="display: inline-block; width: auto; font-size: 13px; padding: 6px 14px; margin: 0;" data-translate="reset_stock_10">🔄 Reset Stok ke 10</button>
+                  <button class="btn-action btn-scan" onclick="playKeypadSound(); bukaSkrinCetakBarcode()" style="display: inline-block; width: auto; font-size: 13px; padding: 6px 14px; margin: 0;" data-translate="print_barcode_btn">🖨️ Cetak Kad Kod Bar</button>
+                </div>
+              </div>
+
+              <div style="padding: 12px; background: #ffffff; border-radius: 16px; border: 2px dashed #0284c7;">
+                <h4 style="margin: 0 0 8px 0; color: #0284c7; text-align: center; font-size: 14px;" data-translate="add_product_title">➕ Tambah Barangan / Kupon Baharu</h4>
+                <div style="display: flex; flex-direction: column; gap: 8px;">
+                  <div style="display: flex; gap: 6px;">
+                    <input type="text" id="new-name" placeholder="Nama Barang" data-translate-placeholder="placeholder_item_name" style="flex: 2; padding: 6px; border-radius: 8px; border: 1px solid #cbd5e1; font-size: 13px;">
+                    <input type="text" id="new-barcode" placeholder="Kod Bar" data-translate-placeholder="placeholder_barcode" style="flex: 1.5; padding: 6px; border-radius: 8px; border: 1px solid #cbd5e1; font-size: 13px;">
+                  </div>
+                  <div style="display: flex; gap: 6px;">
+                    <input type="number" id="new-price" placeholder="Harga (RM)" data-translate-placeholder="placeholder_price" style="flex: 1; padding: 6px; border-radius: 8px; border: 1px solid #cbd5e1; font-size: 13px;">
+                    <input type="number" id="new-stock" placeholder="Stok" value="10" data-translate-placeholder="placeholder_stock" style="flex: 1; padding: 6px; border-radius: 8px; border: 1px solid #cbd5e1; font-size: 13px;">
+                    <button class="btn-action btn-scan" onclick="tambahProdukBaharu()" style="flex: 1; margin: 0; padding: 6px; font-size: 13px;" data-translate="add_btn">+ Tambah</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- KOLUM KANAN: BAHAGIAN MOD & TETAPAN GURU / IBU BAPA -->
+            <div class="setting-col">
+              
+              <!-- SUB-BAHAGIAN PILIHAN BAHASA -->
+              <div style="padding: 12px; background: #fdf4ff; border-radius: 16px; border: 2px dashed #c084fc;">
+                <h4 style="margin: 0 0 8px 0; color: #7e22ce; text-align: center; font-size: 14px;" data-translate="language_settings_title">🌐 Pilihan Bahasa Sistem</h4>
+                <div style="display: flex; justify-content: center; gap: 8px;">
+                  <button id="lang-btn-ms" class="btn-mode active" onclick="tukarBahasa('ms')">🇲🇾 Bahasa Melayu</button>
+                  <button id="lang-btn-en" class="btn-mode" onclick="tukarBahasa('en')">🇬🇧 English</button>
+                </div>
+              </div>
+
+              <!-- SUB-BAHAGIAN MOD PEMBELAJARAN -->
+              <div style="padding: 12px; background: #ffffff; border-radius: 16px; border: 2px dashed #0284c7;">
+                <h4 style="margin: 0 0 10px 0; color: #0284c7; text-align: center; font-size: 15px;" data-translate="learning_mode_title">🎮 Bahagian Mod Pembelajaran</h4>
+                <div style="display: flex; flex-direction: column; gap: 10px;">
+                  <div style="background: #f0f9ff; padding: 10px 12px; border-radius: 12px; border: 1px solid #bae6fd; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 6px;">
+                    <span style="font-weight: bold; color: #0369a1; font-size: 13px;" data-translate="money_display_label">🎨 Paparan Wang:</span>
+                    <div style="display: flex; gap: 4px;">
+                      <button id="setting-btn-visual-on" class="btn-mode active" style="padding: 5px 10px; font-size: 12px;" onclick="pilihModVisual('visual')" data-translate="visual_mode_btn">🖼️ Visual</button>
+                      <button id="setting-btn-visual-off" class="btn-mode" style="padding: 5px 10px; font-size: 12px;" onclick="pilihModVisual('abstrak')" data-translate="abstract_mode_btn">🧠 Abstrak</button>
+                    </div>
+                  </div>
+                  <div style="background: #f0f9ff; padding: 10px 12px; border-radius: 12px; border: 1px solid #bae6fd; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 6px;">
+                    <span style="font-weight: bold; color: #0369a1; font-size: 13px;" data-translate="payment_rule_label">💵 Syarat Bayaran:</span>
+                    <div style="display: flex; gap: 4px;">
+                      <button id="setting-btn-mod-mudah" class="btn-mode active" style="padding: 5px 10px; font-size: 12px;" onclick="pilihMod('mudah')" data-translate="exact_money_btn">🌱 Wang Tepat</button>
+                      <button id="setting-btn-mod-sukar" class="btn-mode" style="padding: 5px 10px; font-size: 12px;" onclick="pilihMod('sukar')" data-translate="change_mode_btn">🚀 Ada Baki</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- SUB-BAHAGIAN PILIHAN SUARA (TTS) -->
+              <div style="padding: 12px; background: #fffbeb; border-radius: 16px; border: 2px dashed #f59e0b;">
+                <h4 style="margin: 0 0 8px 0; color: #b45309; text-align: center; font-size: 14px;" data-translate="tts_title">🗣️ Sebutan Suara Audio (TTS)</h4>
+                <div style="display: flex; gap: 8px; flex-wrap: wrap; align-items: center;">
+                  <select id="voiceSelect" onchange="pilihSuara(this.value)" style="flex: 1.5; min-width: 140px; padding: 6px; border-radius: 8px; border: 1px solid #cbd5e1; font-weight: bold; background: white; font-size: 12px;">
+                    <option value="">-- Memuatkan Suara... --</option>
+                  </select>
+                  <button class="btn-action btn-voice" onclick="playKeypadSound(); ujiSuaraPilihan()" style="flex: 1; min-width: 90px; margin: 0; font-size: 12px; padding: 6px;" data-translate="test_voice_btn">🔊 Uji Suara</button>
+                </div>
+              </div>
+
+              <!-- SUB-BAHAGIAN PIN KAWALAN -->
+              <div style="padding: 12px; background: #f0fdf4; border-radius: 16px; border: 2px dashed #22c55e;">
+                <h4 style="margin: 0 0 8px 0; color: #15803d; text-align: center; font-size: 14px;" data-translate="pin_ctrl_title">🔒 PIN Kawalan Guru / Ibu Bapa</h4>
+                <div style="display: flex; gap: 6px; flex-wrap: wrap; justify-content: center; align-items: center;">
+                  <input type="password" id="input-pin-baru" placeholder="PIN Baru" data-translate-placeholder="placeholder_new_pin" maxlength="8" style="padding: 6px; border-radius: 8px; border: 1px solid #cbd5e1; text-align: center; font-size: 14px; font-weight: bold; width: 110px;">
+                  <button class="btn-action btn-scan" onclick="simpanPinBaru()" style="width: auto; margin: 0; padding: 6px 12px; font-size: 12px;" data-translate="save_btn">💾 Simpan</button>
+                  <button class="btn-action btn-reset" onclick="kunciKawalanIbuBapa()" style="width: auto; margin: 0; padding: 6px 12px; font-size: 12px;" data-translate="lock_btn">🔒 Kunci</button>
+                </div>
+              </div>
+
+            </div>
+
+          </div>
+
+          <!-- BUTANG SIMPAN & KEMBALI DI BAHAGIAN BAWAH -->
+          <div style="margin-top: 20px;">
+            <button class="btn-action btn-pay" onclick="playKeypadSound(); simpanDanKembali()" data-translate="save_return_btn">💾 Simpan & Kembali ke Kedai</button>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= SKRIN CETAK KAD KOD BAR ================= -->
+  <div id="printable-barcode-screen">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;" class="no-print">
+      <h2 style="margin: 0; color: #0284c7;" data-translate="print_screen_title">🖨️ Cetak Kad Kod Bar Rasmi Smart Cilik Market</h2>
+      <div style="display: flex; gap: 10px;">
+        <button class="btn-action btn-scan" onclick="window.print()" style="margin: 0; padding: 8px 16px; font-size: 14px;" data-translate="print_now_btn">🖨️ Cetak Sekarang</button>
+        <button class="btn-action btn-reset" onclick="tutupSkrinCetakBarcode()" style="margin: 0; padding: 8px 16px; font-size: 14px;" data-translate="close_btn">❌ Tutup</button>
+      </div>
+    </div>
+    <div class="print-grid" id="printable-grid-container"></div>
+  </div>
+
+  <!-- ================= SKRIN SPECIAL CUSTOMER DISPLAY (PADA PHONE) ================= -->
+  <div id="customer-display-screen">
+    <div style="text-align: center; border-bottom: 2px dashed #0284c7; padding-bottom: 10px; margin-bottom: 15px;">
+      <h2 style="margin: 0; font-size: 26px; color: #0284c7;">🛒 SMART CILIK MARKET</h2>
+      <p style="margin: 0; color: #16a34a; font-weight: bold; font-size: 14px;" data-translate="customer_screen_subtitle">Skrin Paparan Pelanggan 😃</p>
+    </div>
+
+    <!-- BORANG SAMBUNGAN MANUAL JIKA DIBUKA PADA PHONE -->
+    <div id="cd-connect-box" style="background: white; padding: 20px; border-radius: 20px; text-align: center; margin-bottom: 15px; border: 2px dashed #0284c7; box-shadow: 0 4px 10px rgba(0,0,0,0.05);">
+      <h3 style="margin-top: 0; color: #0284c7;" data-translate="connect_tablet_title">Sambungkan ke Tablet Juruwang</h3>
+      <p style="font-size: 12px; color: #64748b; margin-bottom: 12px;" data-translate="connect_tablet_desc">Masukkan ID Sambungan Manual yang tertera pada skrin Tablet:</p>
+      <input type="text" id="input-target-peer-id" placeholder="Contoh: cilik-4821" style="padding: 10px; border-radius: 12px; border: 2px solid #cbd5e1; font-size: 20px; text-align: center; width: 85%; font-weight: bold; color: #0284c7; text-transform: lowercase;">
+      <br><br>
+      <button onclick="sambungManualDariPhone()" class="btn-action btn-scan" style="margin: 0 auto; width: 85%; font-size: 16px;" data-translate="connect_btn">Sambung ke Tablet 🔗</button>
+    </div>
+
+    <!-- PAPARAN TRANSAKSI UTAMA PADA PHONE -->
+    <div id="cd-main-content" style="background: white; border-radius: 20px; padding: 15px; box-shadow: 0 4px 12px rgba(0,0,0,0.05); flex: 1;">
+      <h3 style="margin-top: 0; color: #0369a1; text-align: left; font-size: 18px;" data-translate="your_items_title">Barangan Anda:</h3>
+      <div id="cd-cart-list" style="min-height: 140px; max-height: 250px; overflow-y: auto;"></div>
+
+      <div style="background: #e0f2fe; color: #0284c7; font-size: 24px; font-weight: 700; text-align: center; padding: 12px; border-radius: 16px; margin-top: 15px;">
+        <span data-translate="total_label">Jumlah</span>: RM <span id="cd-total-val">0</span>
+      </div>
+
+      <div id="cd-bayaran-section" style="margin-top: 15px; display: none;">
+        <div style="background: #fef3c7; color: #b45309; font-size: 20px; font-weight: 700; text-align: center; padding: 10px; border-radius: 16px; margin-bottom: 10px;">
+          <span data-translate="money_received_label">Wang Diterima</span>: RM <span id="cd-paid-val">0</span>
+        </div>
+        <div id="cd-change-box" style="font-size: 22px; font-weight: 700; text-align: center; padding: 12px; border-radius: 16px; background: #dcfce7; color: #15803d; border: 2px solid #22c55e;">
+          Baki: RM 0
+        </div>
+      </div>
+    </div>
+
+    <!-- PAPARAN PEMBAYARAN BERJAYA (RESIT) PADA PHONE -->
+    <div id="cd-success-screen" style="display: none; background: white; border-radius: 24px; padding: 20px; border: 5px dashed #0284c7; text-align: center; box-shadow: 0 8px 20px rgba(0,0,0,0.08);">
+      <h2 style="color: #0284c7; margin-bottom: 5px;" data-translate="receipt_title">🧾 RESIT PEMBAYARAN</h2>
+      <p style="color: #16a34a; font-weight: bold; font-size: 18px; margin-top: 0;" data-translate="payment_success">Pembayaran Berjaya! 🎉</p>
+
+      <div id="cd-receipt-summary" style="font-size: 14px; text-align: left; background: #f8fafc; padding: 12px; border-radius: 16px; margin-bottom: 15px; max-height: 180px; overflow-y: auto;"></div>
+
+      <div class="big-change-card" style="margin: 10px 0;">
+        <div style="font-size: 16px; font-weight: 700; color: #166534;" data-translate="return_change_label">💵 PULANGKAN BAKI:</div>
+        <div class="big-change-amount" id="cd-modal-baki-val" style="font-size: 38px;">RM 0</div>
+        <div id="cd-modal-visual-baki" class="visual-money-grid" style="margin-top: 10px;"></div>
+      </div>
+
+      <p style="color: #0284c7; font-size: 13px; font-weight: bold; margin-top: 15px;" data-translate="thank_you_msg">Terima Kasih & Sila Datang Lagi! 😊</p>
+    </div>
+  </div>
+
+  <!-- POP-UP MODAL RESIT, AMARAN & PIN (TABLET) -->
+  <div class="overlay" id="receiptModal">
+    <div class="modal-box receipt-box">
+      <h2 style="margin-bottom: 5px; color: #0284c7;" data-translate="receipt_title">🧾 RESIT KEDAI</h2>
+      <p style="margin-top: 0; color: #16a34a; font-weight: bold;" data-translate="payment_success">Pembayaran Berjaya! 🎉</p>
+      <div id="receipt-summary" style="font-size: 15px; text-align: left; background: #f8fafc; padding: 12px; border-radius: 16px; margin-bottom: 10px; max-height: 150px; overflow-y: auto;"></div>
+      <div class="big-change-card">
+        <div style="font-size: 18px; font-weight: 700; color: #166534;" data-translate="return_change_label">💵 PULANGKAN BAKI:</div>
+        <div class="big-change-amount" id="modal-baki-val">RM 0</div>
+        <div id="modal-visual-baki" class="visual-money-grid" style="margin-top: 10px;"></div>
+      </div>
+      <button class="btn-action btn-scan" onclick="playKeypadSound(); tutupResit()" data-translate="close_play_again_btn">Tutup & Main Lagi 🔄</button>
+    </div>
+  </div>
+
+  <div class="overlay" id="warningModal">
+    <div class="modal-box warning-box">
+      <h2 style="margin-bottom: 5px; color: #dc2626;" id="warning-title">⚠️ WANG TIDAK CUKUP!</h2>
+      <p style="margin-top: 0; color: #7f1d1d; font-weight: bold;" id="warning-subtitle">Sila tambah wang lagi.</p>
+      <div style="background: #fee2e2; border: 2px dashed #ef4444; border-radius: 16px; padding: 10px; margin: 15px 0;" id="warning-content">
+        <div style="font-size: 14px; color: #991b1b; font-weight: bold;" data-translate="please_add_label">Sila Tambah Lagi:</div>
+        <div style="font-size: 30px; font-weight: bold; color: #dc2626;" id="warning-lack-val">RM 0</div>
+      </div>
+      <button class="btn-action btn-reset" onclick="playKeypadSound(); tutupAmaran()" data-translate="close_btn">Tutup 💵</button>
+    </div>
+  </div>
+
+  <div class="overlay" id="pinModal">
+    <div class="modal-box" style="border: 4px solid #0284c7; background: #f0f9ff;">
+      <h2 style="margin-bottom: 5px; color: #0284c7;" data-translate="pin_modal_title">🔒 KAWALAN GURU & IBU BAPA</h2>
+      <p style="margin-top: 0; color: #0369a1; font-size: 13px; font-weight: bold;" data-translate="pin_modal_desc">Masukkan PIN keselamatan (PIN Asal: <b>1234</b>).</p>
+      <div style="margin: 15px 0;">
+        <input type="password" id="pinInputDisplay" readonly placeholder="----" style="width: 180px; height: 50px; font-size: 28px; text-align: center; font-weight: bold; letter-spacing: 8px; border-radius: 14px; border: 3px solid #0284c7; background: white; color: #0369a1;">
+      </div>
+      <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; max-width: 220px; margin: 0 auto 15px auto;">
+        <button class="btn-mode" style="font-size: 20px; padding: 12px; font-weight: bold;" onclick="tekanPinPad('1')">1</button>
+        <button class="btn-mode" style="font-size: 20px; padding: 12px; font-weight: bold;" onclick="tekanPinPad('2')">2</button>
+        <button class="btn-mode" style="font-size: 20px; padding: 12px; font-weight: bold;" onclick="tekanPinPad('3')">3</button>
+        <button class="btn-mode" style="font-size: 20px; padding: 12px; font-weight: bold;" onclick="tekanPinPad('4')">4</button>
+        <button class="btn-mode" style="font-size: 20px; padding: 12px; font-weight: bold;" onclick="tekanPinPad('5')">5</button>
+        <button class="btn-mode" style="font-size: 20px; padding: 12px; font-weight: bold;" onclick="tekanPinPad('6')">6</button>
+        <button class="btn-mode" style="font-size: 20px; padding: 12px; font-weight: bold;" onclick="tekanPinPad('7')">7</button>
+        <button class="btn-mode" style="font-size: 20px; padding: 12px; font-weight: bold;" onclick="tekanPinPad('8')">8</button>
+        <button class="btn-mode" style="font-size: 20px; padding: 12px; font-weight: bold;" onclick="tekanPinPad('9')">9</button>
+        <button class="btn-mode" style="font-size: 16px; padding: 12px; background: #fee2e2; color: #dc2626; font-weight: bold;" onclick="padamPinPad()">⌫</button>
+        <button class="btn-mode" style="font-size: 20px; padding: 12px; font-weight: bold;" onclick="tekanPinPad('0')">0</button>
+        <button class="btn-mode" style="font-size: 16px; padding: 12px; background: #22c55e; color: white; font-weight: bold;" onclick="sahkanPinPad()">OK</button>
+      </div>
+      <button class="btn-action btn-reset" onclick="tutupModalPin()" style="font-size: 14px; padding: 8px;" data-translate="cancel_btn">Batal ❌</button>
+    </div>
+  </div>
+
+  <audio id="receiptAudio" src="pop-up-sound.mp3" preload="auto"></audio>
+
+  <script>
+    /* Pendaftaran Service Worker untuk Offline PWA */
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('./sw.js')
+          .then(reg => console.log('Service Worker offline sedia!', reg))
+          .catch(err => console.log('Gagal mendaftar Service Worker:', err));
+      });
+    }
+
+    /* ================= KAMUS TERJEMAHAN BAHASA (MS / EN) ================= */
+    const translations = {
+      ms: {
+        title: "Smart Cilik Market",
+        banner_audio: "🔊 Tekan butang ini untuk aktifkan audio & suara peranti (Sangat Penting untuk iPhone/iPad/Safari):",
+        btn_activate_audio: "Aktifkan Audio",
+        modal_connect_desc: "Imbas Kod QR di bawah, <b>atau</b> buka fail ini di phone & masukkan ID Manual:",
+        manual_id_label: "ID SAMBUNGAN MANUAL TABLET:",
+        waiting_conn: "Menunggu sambungan telefon...",
+        close_btn: "Tutup",
+        connect_phone_btn: "📱 Sambung Phone Pelanggan",
+        open_customer_screen_btn: "🖥️ Buka Skrin Pelanggan",
+        sec1_title: "1. Imbas Kamera / Pilih Barang 🛍️",
+        open_cam_btn: "📷 Buka Kamera Gajet",
+        switch_cam_btn: "🔄 Tukar Kamera",
+        catalog_heading: "Ketik / Imbas Barangan & Kupon:",
+        cart_title: "🛒 Troli Barangan",
+        empty_cart: "Belum ada barang dipilih...",
+        total_price_label: "Jumlah Harga",
+        goto_payment_btn: "Ke Bahagian Bayaran ➡️",
+        reset_btn: "Reset / Kosongkan 🔄",
+        back_to_cart_btn: "⬅️ Kembali ke Troli",
+        payment_section_title: "💳 Bahagian Bayaran",
+        amount_to_pay: "Jumlah Perlu Dibayar",
+        money_received_title: "💵 Jumlah Wang Diterima",
+        visual_inserted_title: "💵 Visual Wang Diterima:",
+        no_money_inserted: "Belum ada wang dimasukkan",
+        insert_cash_heading: "Masukkan Duit Kertas:",
+        change_title: "🎉 Baki Pulangan",
+        change_zero: "Baki: RM 0",
+        visual_change_title: "🎉 Visual Baki Pulangan:",
+        no_change: "Tiada baki pulangan",
+        complete_pay_btn: "Selesai & Bayar 💵",
+        reset_payment_btn: "Reset Duit Bayaran 🔄",
+        setting_main_title: "⚙️ Tetapan & Kawalan Kedai",
+        stock_mgmt_title: "📦 Pengurusan Stok Barangan",
+        stock_mgmt_desc: "Kemaskini bilangan stok barangan dan kupon.",
+        table_product: "Produk",
+        table_price: "Harga",
+        table_stock: "Stok",
+        reset_stock_10: "🔄 Reset Stok ke 10",
+        print_barcode_btn: "🖨️ Cetak Kad Kod Bar",
+        add_product_title: "➕ Tambah Barangan / Kupon Baharu",
+        placeholder_item_name: "Nama Barang",
+        placeholder_barcode: "Kod Bar",
+        placeholder_price: "Harga (RM)",
+        placeholder_stock: "Stok",
+        add_btn: "+ Tambah",
+        language_settings_title: "🌐 Pilihan Bahasa Sistem",
+        learning_mode_title: "🎮 Bahagian Mod Pembelajaran",
+        money_display_label: "🎨 Paparan Wang:",
+        visual_mode_btn: "🖼️ Visual",
+        abstract_mode_btn: "🧠 Abstrak",
+        payment_rule_label: "💵 Syarat Bayaran:",
+        exact_money_btn: "🌱 Wang Tepat",
+        change_mode_btn: "🚀 Ada Baki",
+        tts_title: "🗣️ Sebutan Suara Audio (TTS)",
+        test_voice_btn: "🔊 Uji Suara",
+        pin_ctrl_title: "🔒 PIN Kawalan Guru / Ibu Bapa",
+        placeholder_new_pin: "PIN Baru",
+        save_btn: "💾 Simpan",
+        lock_btn: "🔒 Kunci",
+        save_return_btn: "💾 Simpan & Kembali ke Kedai",
+        print_screen_title: "🖨️ Cetak Kad Kod Bar Rasmi Smart Cilik Market",
+        print_now_btn: "🖨️ Cetak Sekarang",
+        customer_screen_subtitle: "Skrin Paparan Pelanggan 😃",
+        connect_tablet_title: "Sambungkan ke Tablet Juruwang",
+        connect_tablet_desc: "Masukkan ID Sambungan Manual yang tertera pada skrin Tablet:",
+        connect_btn: "Sambung ke Tablet 🔗",
+        your_items_title: "Barangan Anda:",
+        total_label: "Jumlah",
+        money_received_label: "Wang Diterima",
+        receipt_title: "🧾 RESIT PEMBAYARAN",
+        payment_success: "Pembayaran Berjaya! 🎉",
+        return_change_label: "💵 PULANGKAN BAKI:",
+        thank_you_msg: "Terima Kasih & Sila Datang Lagi! 😊",
+        close_play_again_btn: "Tutup & Main Lagi 🔄",
+        please_add_label: "Sila Tambah Lagi:",
+        pin_modal_title: "🔒 KAWALAN GURU & IBU BAPA",
+        pin_modal_desc: "Masukkan PIN keselamatan (PIN Asal: <b>1234</b>).",
+        cancel_btn: "Batal ❌"
+      },
+      en: {
+        title: "Smart Cilik Market",
+        banner_audio: "🔊 Press this button to enable audio & device sound (Very important for iPhone/iPad/Safari):",
+        btn_activate_audio: "Enable Audio",
+        modal_connect_desc: "Scan the QR code below, <b>or</b> open this file on your phone & enter the Manual ID:",
+        manual_id_label: "TABLET MANUAL CONNECTION ID:",
+        waiting_conn: "Waiting for phone connection...",
+        close_btn: "Close",
+        connect_phone_btn: "📱 Connect Customer Phone",
+        open_customer_screen_btn: "🖥️ Open Customer Screen",
+        sec1_title: "1. Camera Scan / Select Items 🛍️",
+        open_cam_btn: "📷 Open Gadget Camera",
+        switch_cam_btn: "🔄 Switch Camera",
+        catalog_heading: "Tap / Scan Items & Coupons:",
+        cart_title: "🛒 Shopping Cart",
+        empty_cart: "No items selected yet...",
+        total_price_label: "Total Price",
+        goto_payment_btn: "Go to Payment Section ➡️",
+        reset_btn: "Reset / Clear 🔄",
+        back_to_cart_btn: "⬅️ Back to Cart",
+        payment_section_title: "💳 Payment Section",
+        amount_to_pay: "Amount to Pay",
+        money_received_title: "💵 Money Received",
+        visual_inserted_title: "💵 Visual Money Received:",
+        no_money_inserted: "No money inserted yet",
+        insert_cash_heading: "Insert Cash Notes:",
+        change_title: "🎉 Change Returned",
+        change_zero: "Change: RM 0",
+        visual_change_title: "🎉 Visual Change Returned:",
+        no_change: "No change",
+        complete_pay_btn: "Complete & Pay 💵",
+        reset_payment_btn: "Reset Payment Money 🔄",
+        setting_main_title: "⚙️ Settings & Store Control",
+        stock_mgmt_title: "📦 Item Stock Management",
+        stock_mgmt_desc: "Update stock counts for items and coupons.",
+        table_product: "Product",
+        table_price: "Price",
+        table_stock: "Stock",
+        reset_stock_10: "🔄 Reset Stock to 10",
+        print_barcode_btn: "🖨️ Print Barcode Cards",
+        add_product_title: "➕ Add New Item / Coupon",
+        placeholder_item_name: "Item Name",
+        placeholder_barcode: "Barcode",
+        placeholder_price: "Price (RM)",
+        placeholder_stock: "Stock",
+        add_btn: "+ Add",
+        language_settings_title: "🌐 System Language Options",
+        learning_mode_title: "🎮 Learning Mode Section",
+        money_display_label: "🎨 Money Display:",
+        visual_mode_btn: "🖼️ Visual",
+        abstract_mode_btn: "🧠 Abstract",
+        payment_rule_label: "💵 Payment Rule:",
+        exact_money_btn: "🌱 Exact Money",
+        change_mode_btn: "🚀 Allow Change",
+        tts_title: "🗣️ Audio Voice Speech (TTS)",
+        test_voice_btn: "🔊 Test Voice",
+        pin_ctrl_title: "🔒 Teacher / Parent PIN Control",
+        placeholder_new_pin: "New PIN",
+        save_btn: "💾 Save",
+        lock_btn: "🔒 Lock",
+        save_return_btn: "💾 Save & Return to Store",
+        print_screen_title: "🖨️ Print Official Smart Cilik Market Barcode Cards",
+        print_now_btn: "🖨️ Print Now",
+        customer_screen_subtitle: "Customer Display Screen 😃",
+        connect_tablet_title: "Connect to Cashier Tablet",
+        connect_tablet_desc: "Enter the Manual Connection ID shown on the Tablet screen:",
+        connect_btn: "Connect to Tablet 🔗",
+        your_items_title: "Your Items:",
+        total_label: "Total",
+        money_received_label: "Money Received",
+        receipt_title: "🧾 PAYMENT RECEIPT",
+        payment_success: "Payment Successful! 🎉",
+        return_change_label: "💵 RETURN CHANGE:",
+        thank_you_msg: "Thank You & Please Come Again! 😊",
+        close_play_again_btn: "Close & Play Again 🔄",
+        please_add_label: "Please Add More:",
+        pin_modal_title: "🔒 TEACHER & PARENT CONTROL",
+        pin_modal_desc: "Enter security PIN (Default PIN: <b>1234</b>).",
+        cancel_btn: "Cancel ❌"
+      }
+    };
+
+    let currentLang = localStorage.getItem('smart_cilik_lang') || 'ms';
+
+    function tukarBahasa(lang) {
+      currentLang = lang;
+      localStorage.setItem('smart_cilik_lang', lang);
+      document.getElementById('html-root').lang = lang;
+
+      const btnMs = document.getElementById('lang-btn-ms');
+      const btnEn = document.getElementById('lang-btn-en');
+      if (lang === 'en') {
+        if (btnEn) btnEn.className = "btn-mode active";
+        if (btnMs) btnMs.className = "btn-mode";
+      } else {
+        if (btnMs) btnMs.className = "btn-mode active";
+        if (btnEn) btnEn.className = "btn-mode";
+      }
+
+      document.querySelectorAll('[data-translate]').forEach(el => {
+        const key = el.getAttribute('data-translate');
+        if (translations[lang][key]) {
+          el.innerHTML = translations[lang][key];
+        }
+      });
+
+      document.querySelectorAll('[data-translate-placeholder]').forEach(el => {
+        const key = el.getAttribute('data-translate-placeholder');
+        if (translations[lang][key]) {
+          el.placeholder = translations[lang][key];
+        }
+      });
+
+      kemaskiniUI();
+    }
+
+    let audioCtx = null;
+    let currentUtterance = null; 
+
+    function initAudioContext() {
+      if (!audioCtx) {
+        const AudioContextClass = window.AudioContext || window.webkitAudioContext;
+        if (AudioContextClass) {
+          audioCtx = new AudioContextClass();
+        }
+      }
+      if (audioCtx && audioCtx.state === 'suspended') {
+        audioCtx.resume();
+      }
+    }
+
+    function aktifkanAudioPenuhPeranti() {
+      initAudioContext();
+      if ('speechSynthesis' in window) {
+        window.speechSynthesis.resume();
+        sebutAyat(currentLang === 'en' ? "Audio and voice have been activated." : "Audio dan suara telah diaktifkan.");
+      }
+      const banner = document.getElementById('audio-activate-banner');
+      if (banner) banner.style.display = 'none';
+    }
+
+    function toggleFullScreen() {
+      const btn = document.getElementById('btn-fullscreen-toggle');
+      if (!document.fullscreenElement && !document.webkitFullscreenElement && !document.mozFullScreenElement && !document.msFullscreenElement) {
+        const docEl = document.documentElement;
+        if (docEl.requestFullscreen) {
+          docEl.requestFullscreen();
+        } else if (docEl.webkitRequestFullscreen) { 
+          docEl.webkitRequestFullscreen();
+        } else if (docEl.mozRequestFullScreen) { 
+          docEl.mozRequestFullScreen();
+        } else if (docEl.msRequestFullscreen) { 
+          docEl.msRequestFullscreen();
+        }
+        if (btn) btn.innerText = "🗗";
+      } else {
+        if (document.exitFullscreen) {
+          document.exitFullscreen();
+        } else if (document.webkitExitFullscreen) {
+          document.webkitExitFullscreen();
+        } else if (document.mozCancelFullScreen) {
+          document.mozCancelFullScreen();
+        } else if (document.msExitFullscreen) {
+          document.msExitFullscreen();
+        }
+        if (btn) btn.innerText = "⛶";
+      }
+    }
+
+    document.addEventListener('fullscreenchange', kemaskiniIconFullscreen);
+    document.addEventListener('webkitfullscreenchange', kemaskiniIconFullscreen);
+    document.addEventListener('mozfullscreenchange', kemaskiniIconFullscreen);
+    document.addEventListener('MSFullscreenChange', kemaskiniIconFullscreen);
+
+    function kemaskiniIconFullscreen() {
+      const btn = document.getElementById('btn-fullscreen-toggle');
+      if (!btn) return;
+      if (document.fullscreenElement || document.webkitFullscreenElement || document.mozFullScreenElement || document.msFullscreenElement) {
+        btn.innerText = "🗗";
+      } else {
+        btn.innerText = "⛶";
+      }
+    }
+
+    function nomborKePerkataan(num) {
+      num = Math.floor(Math.abs(num));
+      if (num === 0) return currentLang === 'en' ? "zero" : "kosong";
+
+      const saMs = ["", "satu", "dua", "tiga", "empat", "lima", "enam", "tujuh", "lapan", "sembilan"];
+      const saEn = ["", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine"];
+      const sa = currentLang === 'en' ? saEn : saMs;
+
+      if (currentLang === 'en') {
+        const teensEn = ["ten", "eleven", "twelve", "thirteen", "fourteen", "fifteen", "sixteen", "seventeen", "eighteen", "nineteen"];
+        const tensEn = ["", "", "twenty", "thirty", "forty", "fifty", "sixty", "seventy", "eighty", "ninety"];
+        if (num < 10) return sa[num];
+        if (num >= 10 && num < 20) return teensEn[num - 10];
+        if (num < 100) {
+          const t = Math.floor(num / 10);
+          const r = num % 10;
+          return tensEn[t] + (r > 0 ? " " + sa[r] : "");
+        }
+        if (num < 1000) {
+          const h = Math.floor(num / 100);
+          const r = num % 100;
+          return sa[h] + " hundred" + (r > 0 ? " " + nomborKePerkataan(r) : "");
+        }
+      } else {
+        if (num < 10) return sa[num];
+        if (num === 10) return "sepuluh";
+        if (num === 11) return "sebelas";
+        if (num < 20) return sa[num % 10] + " belas";
+        if (num < 100) {
+          const puluh = Math.floor(num / 10);
+          const baki = num % 10;
+          return (puluh === 1 ? "sepuluh" : sa[puluh] + " puluh") + (baki > 0 ? " " + sa[baki] : "");
+        }
+        if (num < 1000) {
+          const ratus = Math.floor(num / 100);
+          const baki = num % 100;
+          const teksRatus = ratus === 1 ? "seratus" : sa[ratus] + " ratus";
+          return teksRatus + (baki > 0 ? " " + nomborKePerkataan(baki) : "");
+        }
+      }
+      return num.toString();
+    }
+
+    function dapatkanSuaraBahasa() {
+      if (!('speechSynthesis' in window)) return null;
+      const voices = window.speechSynthesis.getVoices();
+      if (!voices || voices.length === 0) return null;
+
+      const selectedVoiceName = localStorage.getItem('smart_cilik_selected_voice');
+      if (selectedVoiceName) {
+        const savedVoice = voices.find(v => v.name === selectedVoiceName);
+        if (savedVoice) return savedVoice;
+      }
+
+      const targetLangPrefix = currentLang === 'en' ? 'en' : 'ms';
+      let voice = voices.find(v => v.lang.toLowerCase().startsWith(targetLangPrefix));
+      return voice || voices[0] || null;
+    }
+
+    function muatSenaraiSuara() {
+      if (!('speechSynthesis' in window)) return;
+      const voices = window.speechSynthesis.getVoices();
+      const selectEl = document.getElementById('voiceSelect');
+      if (!selectEl) return;
+
+      selectEl.innerHTML = '';
+      if (!voices || voices.length === 0) {
+        selectEl.innerHTML = '<option value="">Suara laluan peranti aktif</option>';
+        return;
+      }
+
+      const activeVoice = dapatkanSuaraBahasa();
+      const savedVoiceName = localStorage.getItem('smart_cilik_selected_voice') || (activeVoice ? activeVoice.name : '');
+
+      voices.forEach(v => {
+        const opt = document.createElement('option');
+        opt.value = v.name;
+        opt.textContent = `${v.name} (${v.lang})`;
+        if (v.name === savedVoiceName) {
+          opt.selected = true;
+        }
+        selectEl.appendChild(opt);
+      });
+    }
+
+    function pilihSuara(voiceName) {
+      if (voiceName) {
+        localStorage.setItem('smart_cilik_selected_voice', voiceName);
+      }
+    }
+
+    function sebutAyat(teks) {
+      initAudioContext();
+      if ('speechSynthesis' in window) {
+        window.speechSynthesis.cancel();
+        currentUtterance = new SpeechSynthesisUtterance(teks);
+        const suaraBahasa = dapatkanSuaraBahasa();
+
+        if (suaraBahasa) {
+          currentUtterance.voice = suaraBahasa;
+          currentUtterance.lang = suaraBahasa.lang;
+        } else {
+          currentUtterance.lang = currentLang === 'en' ? 'en-US' : 'ms-MY';
+        }
+
+        currentUtterance.rate = 0.95;
+        currentUtterance.pitch = 1.05;
+
+        window.speechSynthesis.resume();
+        window.speechSynthesis.speak(currentUtterance);
+      }
+    }
+
+    function ujiSuaraPilihan() {
+      const msg = currentLang === 'en' ? "Welcome to Smart Cilik Market. Audio voice is working properly." : "Selamat datang ke Smart Cilik Market. Suara audio berfungsi dengan baik.";
+      sebutAyat(msg);
+    }
+
+    if ('speechSynthesis' in window) {
+      window.speechSynthesis.onvoiceschanged = () => muatSenaraiSuara();
+      setTimeout(muatSenaraiSuara, 500);
+      setTimeout(muatSenaraiSuara, 1500);
+    }
+
+    function sebutJumlahHarga() {
+      const finalTotal = Math.max(0, jumlahHarga);
+      if (currentLang === 'en') {
+        sebutAyat(finalTotal === 0 ? "Total price is zero ringgit." : `Total price is ${nomborKePerkataan(finalTotal)} ringgit.`);
+      } else {
+        sebutAyat(finalTotal === 0 ? "Jumlah harga ialah kosong ringgit." : `Jumlah harga ialah ${nomborKePerkataan(finalTotal)} ringgit.`);
+      }
+    }
+
+    function sebutWangDiterima() {
+      if (currentLang === 'en') {
+        sebutAyat(jumlahBayaran === 0 ? "Money received is zero ringgit." : `Money received is ${nomborKePerkataan(jumlahBayaran)} ringgit.`);
+      } else {
+        sebutAyat(jumlahBayaran === 0 ? "Wang diterima ialah kosong ringgit." : `Wang diterima ialah ${nomborKePerkataan(jumlahBayaran)} ringgit.`);
+      }
+    }
+
+    function sebutBakiPulangan() {
+      const finalTotal = Math.max(0, jumlahHarga);
+      const bakiSemasa = jumlahBayaran - finalTotal;
+
+      if (currentLang === 'en') {
+        if (finalTotal === 0 && troli.length === 0) {
+          sebutAyat("No items in cart yet.");
+        } else if (jumlahBayaran < finalTotal) {
+          const kurang = finalTotal - jumlahBayaran;
+          sebutAyat(`Money is short by ${nomborKePerkataan(kurang)} ringgit.`);
+        } else if (bakiSemasa === 0) {
+          sebutAyat("Amount is sufficient. No change returned.");
+        } else {
+          sebutAyat(`Change returned is ${nomborKePerkataan(bakiSemasa)} ringgit.`);
+        }
+      } else {
+        if (finalTotal === 0 && troli.length === 0) {
+          sebutAyat("Belum ada barangan dalam troli.");
+        } else if (jumlahBayaran < finalTotal) {
+          const kurang = finalTotal - jumlahBayaran;
+          sebutAyat(`Wang kurang ${nomborKePerkataan(kurang)} ringgit.`);
+        } else if (bakiSemasa === 0) {
+          sebutAyat("Wang mencukupi. Tiada baki pulangan.");
+        } else {
+          sebutAyat(`Baki pulangan ialah ${nomborKePerkataan(bakiSemasa)} ringgit.`);
+        }
+      }
+    }
+
+    function playBeep(freq = 800, duration = 0.08) {
+      try {
+        initAudioContext();
+        if (!audioCtx) return;
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        osc.frequency.value = freq;
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+        osc.start();
+        osc.stop(audioCtx.currentTime + duration);
+      } catch (e) { console.log("Audio Error:", e); }
+    }
+
+    function playKeypadSound() {
+      try {
+        initAudioContext();
+        if (!audioCtx) return;
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        osc.type = 'triangle';
+        osc.frequency.setValueAtTime(1200, audioCtx.currentTime);
+        osc.frequency.exponentialRampToValueAtTime(400, audioCtx.currentTime + 0.05);
+        gain.gain.setValueAtTime(0.3, audioCtx.currentTime);
+        gain.gain.linearRampToValueAtTime(0.01, audioCtx.currentTime + 0.05);
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+        osc.start();
+        osc.stop(audioCtx.currentTime + 0.05);
+      } catch (e) { console.log("Audio Error:", e); }
+    }
+
+    function playWarningSound() {
+      try {
+        initAudioContext();
+        if (!audioCtx) return;
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        osc.type = 'sawtooth';
+        osc.frequency.setValueAtTime(220, audioCtx.currentTime);
+        osc.frequency.setValueAtTime(180, audioCtx.currentTime + 0.15);
+        gain.gain.setValueAtTime(0.2, audioCtx.currentTime);
+        gain.gain.linearRampToValueAtTime(0.01, audioCtx.currentTime + 0.3);
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+        osc.start();
+        osc.stop(audioCtx.currentTime + 0.3);
+      } catch (e) { console.log("Audio Error:", e); }
+    }
+
+    function playReceiptSound() {
+      const audio = document.getElementById('receiptAudio');
+      if (audio) {
+        audio.currentTime = 0;
+        audio.play().catch(() => {
+          try {
+            initAudioContext();
+            const now = audioCtx.currentTime;
+            const osc = audioCtx.createOscillator();
+            const gain = audioCtx.createGain();
+            osc.type = 'sine';
+            osc.frequency.setValueAtTime(523.25, now);
+            osc.frequency.setValueAtTime(659.25, now + 0.1);
+            osc.frequency.setValueAtTime(783.99, now + 0.2);
+            gain.gain.setValueAtTime(0.3, now);
+            gain.gain.linearRampToValueAtTime(0.01, now + 0.35);
+            osc.connect(gain);
+            gain.connect(audioCtx.destination);
+            osc.start(now);
+            osc.stop(now + 0.35);
+          } catch(err){}
+        });
+      }
+    }
+
+    let peer = null;
+    let peerConn = null;
+    const urlParams = new URLSearchParams(window.location.search);
+    const displayTargetId = urlParams.get('display_id');
+
+    const tabletPeerId = 'cilik-' + Math.floor(1000 + Math.random() * 9000);
+
+    if (displayTargetId) {
+      bukaModPelangganAuto(displayTargetId);
+    } else {
+      initHostPeer();
+    }
+
+    function initHostPeer() {
+      peer = new Peer(tabletPeerId);
+      
+      peer.on('open', (id) => {
+        const manualEl = document.getElementById('manual-peer-id');
+        if (manualEl) manualEl.innerText = id;
+        
+        const currentUrl = window.location.href.split('?')[0];
+        const displayUrl = `${currentUrl}?display_id=${id}`;
+        
+        const qrContainer = document.getElementById('display-qrcode');
+        if (qrContainer) {
+          qrContainer.innerHTML = '';
+          new QRCode(qrContainer, {
+            text: displayUrl,
+            width: 170,
+            height: 170
+          });
+        }
+      });
+
+      peer.on('connection', (conn) => {
+        peerConn = conn;
+        const statusEl = document.getElementById('display-status-text');
+        if (statusEl) {
+          statusEl.innerText = currentLang === 'en' ? "✅ Phone Connected Successfully!" : "✅ Telefon Berjaya Disambungkan!";
+          statusEl.style.color = "#16a34a";
+        }
+        hantarDataKeCustomerDisplay();
+      });
+    }
+
+    function bukaModPelangganManualUI() {
+      document.getElementById('main-pos-app').style.display = 'none';
+      document.getElementById('customer-display-screen').style.display = 'flex';
+    }
+
+    function bukaModPelangganAuto(targetId) {
+      bukaModPelangganManualUI();
+      document.getElementById('cd-connect-box').style.display = 'none';
+      
+      const clientPeer = new Peer();
+      clientPeer.on('open', () => {
+        const conn = clientPeer.connect(targetId);
+        conn.on('data', (data) => updateCustomerDisplayUI(data));
+      });
+    }
+
+    function sambungManualDariPhone() {
+      const targetId = document.getElementById('input-target-peer-id').value.trim().toLowerCase();
+      if (!targetId) {
+        alert(currentLang === 'en' ? "Please enter Manual Connection ID!" : "Sila masukkan ID Sambungan Manual!");
+        return;
+      }
+
+      const clientPeer = new Peer();
+      clientPeer.on('open', () => {
+        const conn = clientPeer.connect(targetId);
+        
+        conn.on('open', () => {
+          document.getElementById('cd-connect-box').style.display = 'none';
+        });
+
+        conn.on('data', (data) => updateCustomerDisplayUI(data));
+      });
+
+      clientPeer.on('error', (err) => {
+        alert(currentLang === 'en' ? "Failed to connect to Tablet. Please verify the ID." : "Gagal menyambung ke Tablet. Sila pastikan Kod ID dimasukkan dengan betul.");
+      });
+    }
+
+    function hantarDataKeCustomerDisplay(isCompleted = false, baki = 0, visualHtml = '') {
+      if (peerConn && peerConn.open) {
+        const isBayaranPage = document.getElementById('page-bayaran').classList.contains('active');
+        peerConn.send({
+          troli: troli,
+          jumlahHarga: Math.max(0, jumlahHarga),
+          jumlahBayaran: jumlahBayaran,
+          isBayaranPage: isBayaranPage,
+          isCompleted: isCompleted,
+          baki: baki,
+          visualHtml: visualHtml
+        });
+      }
+    }
+
+    function updateCustomerDisplayUI(data) {
+      const cdMainContent = document.getElementById('cd-main-content');
+      const cdSuccessScreen = document.getElementById('cd-success-screen');
+
+      if (data.isCompleted) {
+        cdMainContent.style.display = 'none';
+        cdSuccessScreen.style.display = 'block';
+
+        const totalUnits = data.troli.reduce((sum, item) => sum + item.kuantiti, 0);
+        let summaryHTML = `<div style="margin-bottom:8px;">🛒 <b>${currentLang === 'en' ? 'Total Units:' : 'Jumlah Unit:'}</b> ${totalUnits} unit</div>`;
+        summaryHTML += `<ul style="margin: 5px 0; padding-left: 18px;">`;
+        
+        data.troli.forEach(item => {
+          const itemTotal = item.harga * item.kuantiti;
+          const hargaText = item.isCoupon ? `-RM ${Math.abs(itemTotal)}` : `RM ${itemTotal}`;
+          summaryHTML += `<li>${item.nama} x${item.kuantiti} = <b>${hargaText}</b></li>`;
+        });
+        
+        summaryHTML += `</ul>`;
+        summaryHTML += `<hr style="border: 0; border-top: 1px dashed #cbd5e1; margin: 8px 0;">`;
+        summaryHTML += `<div>💰 <b>${currentLang === 'en' ? 'Total Price:' : 'Jumlah Harga:'}</b> RM ${data.jumlahHarga}</div>`;
+        summaryHTML += `<div>💵 <b>${currentLang === 'en' ? 'Money Received:' : 'Wang Diterima:'}</b> RM ${data.jumlahBayaran}</div>`;
+
+        document.getElementById('cd-receipt-summary').innerHTML = summaryHTML;
+        document.getElementById('cd-modal-baki-val').innerText = `RM ${data.baki}`;
+        document.getElementById('cd-modal-visual-baki').innerHTML = data.visualHtml;
+        return;
+      }
+
+      cdSuccessScreen.style.display = 'none';
+      cdMainContent.style.display = 'block';
+
+      const cdCartEl = document.getElementById('cd-cart-list');
+      const cdTotalEl = document.getElementById('cd-total-val');
+      const cdPaidEl = document.getElementById('cd-paid-val');
+      const cdChangeBox = document.getElementById('cd-change-box');
+      const cdBayaranSec = document.getElementById('cd-bayaran-section');
+
+      if (!data.troli || data.troli.length === 0) {
+        cdCartEl.innerHTML = `<p style="text-align: center; color: #94a3b8; margin-top: 35px;">${translations[currentLang].empty_cart}</p>`;
+      } else {
+        cdCartEl.innerHTML = data.troli.map(item => {
+          const itemTotal = item.harga * item.kuantiti;
+          const displayPrice = item.isCoupon ? `-RM ${Math.abs(itemTotal)}` : `RM ${itemTotal}`;
+          return `
+            <div style="display: flex; justify-content: space-between; align-items: center; padding: 10px 0; border-bottom: 1px solid #f1f5f9;">
+              <div style="display: flex; align-items: center; gap: 10px;">
+                <img src="${item.img}" style="width: 40px; height: 40px; object-fit: contain;" onerror="this.src='https://cdn-icons-png.flaticon.com/512/726/726476.png'">
+                <div>
+                  <div style="font-weight: bold; font-size: 14px;">${item.nama}</div>
+                  <div style="font-size: 12px; color: #64748b;">x${item.kuantiti}</div>
+                </div>
+              </div>
+              <div style="font-weight: bold; color: #0284c7;">${displayPrice}</div>
+            </div>
+          `;
+        }).join('');
+      }
+
+      cdTotalEl.innerText = data.jumlahHarga;
+
+      if (data.isBayaranPage) {
+        cdBayaranSec.style.display = 'block';
+        cdPaidEl.innerText = data.jumlahBayaran;
+        const baki = data.jumlahBayaran - data.jumlahHarga;
+        if (data.jumlahBayaran < data.jumlahHarga) {
+          cdChangeBox.style.background = '#fee2e2';
+          cdChangeBox.style.color = '#dc2626';
+          cdChangeBox.style.borderColor = '#ef4444';
+          cdChangeBox.innerText = currentLang === 'en' ? `Shortage: RM ${Math.abs(baki)}` : `Wang Kurang: RM ${Math.abs(baki)}`;
+        } else {
+          cdChangeBox.style.background = '#dcfce7';
+          cdChangeBox.style.color = '#15803d';
+          cdChangeBox.style.borderColor = '#22c55e';
+          cdChangeBox.innerText = currentLang === 'en' ? `Change: RM ${baki} 🎉` : `Baki Pulangan: RM ${baki} 🎉`;
+        }
+      } else {
+        cdBayaranSec.style.display = 'none';
+      }
+    }
+
+    function bukaModalDisplay() {
+      playKeypadSound();
+      document.getElementById('displayConnectModal').style.display = 'flex';
+    }
+
+    function tutupModalDisplay() {
+      playKeypadSound();
+      document.getElementById('displayConnectModal').style.display = 'none';
+    }
+
+    let isParentUnlocked = false; 
+    let parentPinCode = localStorage.getItem('smart_cilik_pin_code') || "1234";
+    let pendingAction = null; 
+    let currentPinInput = "";
+
+    function semakAksesGuru(tindakanMasaAkses) {
+      if (isParentUnlocked) {
+        tindakanMasaAkses();
+      } else {
+        pendingAction = tindakanMasaAkses;
+        bukaModalPin();
+      }
+    }
+
+    function bukaModalPin() {
+      playKeypadSound();
+      currentPinInput = "";
+      const display = document.getElementById('pinInputDisplay');
+      if (display) display.value = "";
+      document.getElementById('pinModal').style.display = 'flex';
+    }
+
+    function tutupModalPin() {
+      playKeypadSound();
+      document.getElementById('pinModal').style.display = 'none';
+      pendingAction = null;
+    }
+
+    function tekanPinPad(digit) {
+      playKeypadSound();
+      if (currentPinInput.length < 8) {
+        currentPinInput += digit;
+        document.getElementById('pinInputDisplay').value = currentPinInput;
+      }
+    }
+
+    function padamPinPad() {
+      playKeypadSound();
+      currentPinInput = currentPinInput.slice(0, -1);
+      document.getElementById('pinInputDisplay').value = currentPinInput;
+    }
+
+    function sahkanPinPad() {
+      if (currentPinInput === parentPinCode) {
+        isParentUnlocked = true;
+        document.getElementById('pinModal').style.display = 'none';
+        sebutAyat(currentLang === 'en' ? "Access verified." : "Akses disahkan.");
+        if (pendingAction) {
+          const act = pendingAction;
+          pendingAction = null;
+          act();
+        }
+      } else {
+        playWarningSound();
+        sebutAyat(currentLang === 'en' ? "Incorrect PIN. Please try again." : "PIN salah. Sila cuba lagi.");
+        currentPinInput = "";
+        document.getElementById('pinInputDisplay').value = "";
+      }
+    }
+
+    function semakDanBukaSetting() {
+      semakAksesGuru(() => bukaPageSetting());
+    }
+
+    function simpanPinBaru() {
+      playKeypadSound();
+      const pinBaru = document.getElementById('input-pin-baru').value.trim();
+      if (pinBaru.length < 4) {
+        tunjukAmaran(currentLang === 'en' ? "⚠️ PIN TOO SHORT" : "⚠️ PIN TERLALU PENDEK", currentLang === 'en' ? "Please enter at least 4 digits." : "Sila masukkan sekurang-kurangnya 4 digit PIN.", "");
+        return;
+      }
+      parentPinCode = pinBaru;
+      localStorage.setItem('smart_cilik_pin_code', parentPinCode);
+      document.getElementById('input-pin-baru').value = "";
+      sebutAyat(currentLang === 'en' ? "New PIN saved successfully." : "PIN baru berjaya disimpan.");
+      tunjukAmaran(currentLang === 'en' ? "✅ PIN UPDATED" : "✅ PIN DIKEMASKINI", `${currentLang === 'en' ? 'New Control PIN is:' : 'PIN Kawalan Guru/Ibu Bapa baharu ialah:'} ${parentPinCode}`, "");
+    }
+
+    function kunciKawalanIbuBapa() {
+      playKeypadSound();
+      isParentUnlocked = false;
+      sebutAyat(currentLang === 'en' ? "Control locked again." : "Kawalan dikunci semula.");
+      tunjukAmaran(currentLang === 'en' ? "🔒 LOCKED AGAIN" : "🔒 DIKUNCI SEMULA", currentLang === 'en' ? "Mod and settings access has been locked." : "Akses mod dan tetapan telah dikunci semula.", "");
+    }
+
+    const defaultProdukList = [
+      { id: "11001001", nama: "Gula", harga: 3, stok: 10, img: "gula.png", isCoupon: false },
+      { id: "11002002", nama: "Susu Pekat", harga: 4, stok: 10, img: "susu-pekat.png", isCoupon: false },
+      { id: "11003003", nama: "Susu Segar", harga: 5, stok: 10, img: "susu-segar.png", isCoupon: false },
+      { id: "11004004", nama: "Kicap", harga: 3, stok: 10, img: "kicap.png", isCoupon: false },
+      { id: "11005005", nama: "Sos Cili", harga: 2, stok: 10, img: "sos-cili.png", isCoupon: false },
+      { id: "11006006", nama: "Teh", harga: 4, stok: 10, img: "teh.png", isCoupon: false },
+      { id: "11007007", nama: "Jus Epal", harga: 2, stok: 10, img: "jus-epal.png", isCoupon: false },
+      { id: "11008008", nama: "Sardin", harga: 5, stok: 10, img: "sardin.png", isCoupon: false },
+      { id: "99001001", nama: "Kupon Diskaun RM1", harga: -1, stok: 10, img: "kupon1.png", isCoupon: true },
+      { id: "99002002", nama: "Kupon Diskaun RM2", harga: -2, stok: 10, img: "kupon2.png", isCoupon: true }
+    ];
+
+    let produkList = JSON.parse(localStorage.getItem('smart_cilik_stok_v6')) || defaultProdukList;
+
+    let troli = []; 
+    let jumlahHarga = 0;
+    let jumlahBayaran = 0;
+    let senaraiWangDiterima = []; 
+    
+    let html5QrCode = null;
+    let cameraActive = false;
+    let lastScannedCode = "";
+    let lastScanTime = 0;
+    let availableCameras = [];
+    let currentCameraIndex = 0;
+
+    let modPembelajaran = 'mudah';
+    let modVisualWang = 'visual';
+
+    function pilihModVisual(mod) {
+      playKeypadSound();
+      modVisualWang = mod;
+
+      const settingBtnVisualOn = document.getElementById('setting-btn-visual-on');
+      const settingBtnVisualOff = document.getElementById('setting-btn-visual-off');
+      const boxInserted = document.getElementById('box-visual-inserted');
+      const boxChange = document.getElementById('box-visual-change');
+
+      if (mod === 'visual') {
+        if (settingBtnVisualOn) settingBtnVisualOn.className = "btn-mode active";
+        if (settingBtnVisualOff) settingBtnVisualOff.className = "btn-mode";
+        if (boxInserted) boxInserted.classList.remove('hidden-mode');
+        if (boxChange) boxChange.classList.remove('hidden-mode');
+      } else {
+        if (settingBtnVisualOn) settingBtnVisualOn.className = "btn-mode";
+        if (settingBtnVisualOff) settingBtnVisualOff.className = "btn-mode active";
+        if (boxInserted) boxInserted.classList.add('hidden-mode');
+        if (boxChange) boxChange.classList.add('hidden-mode');
+      }
+      kemaskiniUI();
+    }
+
+    function pilihMod(mod) {
+      playKeypadSound();
+      modPembelajaran = mod;
+      
+      const settingBtnMudah = document.getElementById('setting-btn-mod-mudah');
+      const settingBtnSukar = document.getElementById('setting-btn-mod-sukar');
+
+      if (mod === 'mudah') {
+        if (settingBtnMudah) settingBtnMudah.className = "btn-mode active";
+        if (settingBtnSukar) settingBtnSukar.className = "btn-mode";
+      } else {
+        if (settingBtnSukar) settingBtnSukar.className = "btn-mode active";
+        if (settingBtnMudah) settingBtnMudah.className = "btn-mode";
+      }
+      kemaskiniUI();
+    }
+
+    function bukaPageKedai() {
+      document.querySelectorAll('.page-section').forEach(p => p.classList.remove('active'));
+      document.getElementById('page-kedai').classList.add('active');
+      hantarDataKeCustomerDisplay();
+    }
+
+    function bukaPageBayaran() {
+      if (troli.length === 0) {
+        tunjukAmaran(currentLang === 'en' ? "🛒 CART IS EMPTY!" : "🛒 TROLI KOSONG!", currentLang === 'en' ? "Please choose or scan items first." : "Sila pilih atau imbas barang terlebih dahulu sebelum ke bahagian bayaran.", "");
+        sebutAyat(currentLang === 'en' ? "Cart is empty. Please select items first." : "Troli kosong. Sila pilih barang terlebih dahulu.");
+        return;
+      }
+      document.querySelectorAll('.page-section').forEach(p => p.classList.remove('active'));
+      document.getElementById('page-bayaran').classList.add('active');
+      kemaskiniUI();
+    }
+
+    function bukaPageSetting() {
+      document.querySelectorAll('.page-section').forEach(p => p.classList.remove('active'));
+      document.getElementById('page-setting').classList.add('active');
+      binaSettingStockUI();
+      muatSenaraiSuara();
+    }
+
+    function binaKatalogUI() {
+      const katalogEl = document.getElementById('katalog');
+      katalogEl.innerHTML = "";
+
+      produkList.forEach(item => {
+        const isCoupon = item.isCoupon;
+        const priceTag = isCoupon ? `<span class="coupon-price">-RM ${Math.abs(item.harga)}</span>` : `<span class="item-price">RM ${item.harga}</span>`;
+        const outOfStock = item.stok <= 0;
+        const cardClass = `item-card ${isCoupon ? 'coupon-card' : ''} ${outOfStock ? 'out-of-stock' : ''}`;
+
+        const stockBadgeText = currentLang === 'en' ? (outOfStock ? 'OUT OF STOCK!' : `Stock: ${item.stok}`) : (outOfStock ? 'STOK HABIS!' : `Stok: ${item.stok}`);
+        const stockBadge = outOfStock 
+          ? `<span class="stock-badge empty">${stockBadgeText}</span>` 
+          : `<span class="stock-badge">${stockBadgeText}</span>`;
+
+        const itemHTML = `
+          <div class="${cardClass}" onclick="${outOfStock ? '' : `tambahKeTroli('${item.id}')`}">
+            <img src="${item.img}" alt="${item.nama}" class="item-img" onerror="this.src='https://cdn-icons-png.flaticon.com/512/726/726476.png'"><br>
+            <span class="item-name">${item.nama}</span>
+            ${priceTag}
+            ${stockBadge}
+            <div class="barcode-display">
+              <svg id="barcode-${item.id}"></svg>
+            </div>
+          </div>
+        `;
+        katalogEl.innerHTML += itemHTML;
+      });
+
+      setTimeout(() => {
+        produkList.forEach(item => {
+          JsBarcode(`#barcode-${item.id}`, item.id, {
+            format: "CODE128",
+            width: 1.2,
+            height: 28,
+            displayValue: true,
+            fontSize: 9,
+            margin: 2
+          });
+        });
+      }, 100);
+    }
+
+    binaKatalogUI();
+
+    function prosesKodBar(code) {
+      const cleanCode = String(code).trim();
+      const produk = produkList.find(p => String(p.id).trim() === cleanCode);
+      
+      if (produk) {
+        tambahKeTroli(produk.id);
+      } else {
+        tunjukAmaran(currentLang === 'en' ? "⚠️ UNKNOWN CODE!" : "⚠️ KOD UNKNOWN!", currentLang === 'en' ? `Barcode [${cleanCode}] not found in system!` : `Kod bar [${cleanCode}] tiada dalam sistem!`, "");
+        sebutAyat(currentLang === 'en' ? "Barcode not found in system." : "Kod bar tiada dalam sistem.");
+      }
+    }
+
+    function tambahKeTroli(id) {
+      const produk = produkList.find(p => p.id === id);
+      if (produk) {
+        if (produk.stok <= 0) {
+          tunjukAmaran(currentLang === 'en' ? "❌ OUT OF STOCK!" : "❌ STOK HABIS!", currentLang === 'en' ? `Product ${produk.nama} is out of stock!` : `Produk ${produk.nama} telah habis stok!`, "");
+          sebutAyat(currentLang === 'en' ? `Stock for ${produk.nama} is out.` : `Stok ${produk.nama} telah habis.`);
+          return;
+        }
+
+        if (produk.isCoupon && (jumlahHarga + produk.harga) < 0) {
+          tunjukAmaran(currentLang === 'en' ? "🎟️ EXCESSIVE COUPON!" : "🎟️ KUPON BERLEBIHAN!", currentLang === 'en' ? "Discount amount cannot exceed item price!" : "Jumlah diskaun tidak boleh melebihi harga barangan!", "");
+          sebutAyat(currentLang === 'en' ? "Coupon discount exceeds item price." : "Jumlah diskaun kupon melebihi harga barangan.");
+          return;
+        }
+
+        const itemExist = troli.find(item => item.id === id);
+        if (itemExist) {
+          if (itemExist.kuantiti >= produk.stok) {
+            tunjukAmaran(currentLang === 'en' ? "⚠️ LIMITED STOCK!" : "⚠️ STOK TERHAD!", currentLang === 'en' ? `Stock for ${produk.nama} is only ${produk.stok} units!` : `Stok ${produk.nama} cuma ada ${produk.stok} unit sahaja!`, "");
+            sebutAyat(currentLang === 'en' ? `Stock for ${produk.nama} is limited.` : `Stok ${produk.nama} terhad.`);
+            return;
+          }
+          itemExist.kuantiti += 1;
+        } else {
+          troli.push({ ...produk, kuantiti: 1 });
+        }
+
+        jumlahHarga += produk.harga;
+        playBeep(produk.isCoupon ? 1200 : 800, 0.08);
+
+        kemaskiniUI();
+      }
+    }
+
+    function buangDariTroli(index) {
+      playKeypadSound();
+      if (index >= 0 && index < troli.length) {
+        const item = troli[index];
+        jumlahHarga -= item.harga;
+        
+        if (item.kuantiti > 1) {
+          item.kuantiti -= 1;
+        } else {
+          troli.splice(index, 1);
+        }
+        kemaskiniUI();
+      }
+    }
+
+    function dapatkanImejWang(nilai) {
+      if (nilai === 10) return "wang-rm10.png";
+      if (nilai === 5) return "wang-rm5.png";
+      if (nilai === 1) return "wang-rm1.png";
+      return "wang-rm1.png";
+    }
+
+    function janaHTMLVisualWang(jumlah) {
+      if (modVisualWang === 'abstrak') {
+        return '';
+      }
+
+      if (jumlah <= 0) {
+        return `<span style="font-size: 12px; color: #94a3b8;">${currentLang === 'en' ? 'No money notes' : 'Tiada kepingan wang'}</span>`;
+      }
+
+      let baki = jumlah;
+      let html = '';
+
+      const count10 = Math.floor(baki / 10);
+      baki %= 10;
+      const count5 = Math.floor(baki / 5);
+      baki %= 5;
+      const count1 = baki;
+
+      for (let i = 0; i < count10; i++) {
+        html += `<img src="wang-rm10.png" alt="RM10" class="money-note-img" onerror="this.src='https://via.placeholder.com/90x45/ef4444/ffffff?text=RM10'">`;
+      }
+      for (let i = 0; i < count5; i++) {
+        html += `<img src="wang-rm5.png" alt="RM5" class="money-note-img" onerror="this.src='https://via.placeholder.com/90x45/22c55e/ffffff?text=RM5'">`;
+      }
+      for (let i = 0; i < count1; i++) {
+        html += `<img src="wang-rm1.png" alt="RM1" class="money-note-img" onerror="this.src='https://via.placeholder.com/90x45/3b82f6/ffffff?text=RM1'">`;
+      }
+
+      return html;
+    }
+
+    function kemaskiniUI() {
+      const cartEl = document.getElementById('cart');
+      if (troli.length === 0) {
+        cartEl.innerHTML = `<p style="text-align: center; color: #94a3b8; margin-top: 35px;">${translations[currentLang].empty_cart}</p>`;
+      } else {
+        cartEl.innerHTML = troli.map((item, index) => {
+          const isCoupon = item.isCoupon;
+          const jumlahHargaItem = item.harga * item.kuantiti;
+          const displayPrice = isCoupon ? `-RM ${Math.abs(jumlahHargaItem)}` : `RM ${jumlahHargaItem}`;
+          const itemClass = isCoupon ? 'cart-item coupon-item' : 'cart-item';
+          const qtyTag = item.kuantiti > 1 ? `<span class="qty-badge">x${item.kuantiti}</span>` : '';
+
+          return `
+            <div class="${itemClass}">
+              <div class="cart-item-info">
+                <img src="${item.img}" class="cart-item-img" onerror="this.src='https://cdn-icons-png.flaticon.com/512/726/726476.png'">
+                <span><b>${item.nama}</b> ${qtyTag}</span>
+              </div>
+              <div>
+                <span style="font-weight: bold;">${displayPrice}</span>
+                <button class="btn-delete-item" onclick="buangDariTroli(${index})">❌</button>
+              </div>
+            </div>
+          `;
+        }).join('');
+      }
+      
+      const finalTotal = Math.max(0, jumlahHarga);
+
+      const badgeVisual1 = document.getElementById('badge-mod-visual-page1');
+      const badgeKiraan1 = document.getElementById('badge-mod-kiraan-page1');
+
+      if (badgeVisual1) {
+        if (modVisualWang === 'visual') {
+          badgeVisual1.innerText = currentLang === 'en' ? "🖼️ Visual Mode" : "🖼️ Mod Visual";
+          badgeVisual1.style.background = "#e0f2fe";
+          badgeVisual1.style.color = "#0369a1";
+          badgeVisual1.style.borderColor = "#38bdf8";
+        } else {
+          badgeVisual1.innerText = currentLang === 'en' ? "🧠 Abstract Mode" : "🧠 Mod Abstrak";
+          badgeVisual1.style.background = "#f3e8ff";
+          badgeVisual1.style.color = "#7e22ce";
+          badgeVisual1.style.borderColor = "#c084fc";
+        }
+      }
+
+      if (badgeKiraan1) {
+        if (modPembelajaran === 'mudah') {
+          badgeKiraan1.innerText = currentLang === 'en' ? "🌱 Exact Money Mode" : "🌱 Mod Wang Tepat";
+          badgeKiraan1.style.background = "#dcfce7";
+          badgeKiraan1.style.color = "#15803d";
+          badgeKiraan1.style.borderColor = "#4ade80";
+        } else {
+          badgeKiraan1.innerText = currentLang === 'en' ? "🚀 Change Mode" : "🚀 Mod Ada Baki";
+          badgeKiraan1.style.background = "#fef3c7";
+          badgeKiraan1.style.color = "#b45309";
+          badgeKiraan1.style.borderColor = "#fcd34d";
+        }
+      }
+
+      document.getElementById('total-val').innerText = finalTotal;
+      const totalValBayaran = document.getElementById('total-val-bayaran');
+      if (totalValBayaran) totalValBayaran.innerText = finalTotal;
+
+      document.getElementById('paid-val').innerText = jumlahBayaran;
+
+      if (modVisualWang === 'visual') {
+        const visualInsertedEl = document.getElementById('visual-inserted-money');
+        if (senaraiWangDiterima.length === 0) {
+          visualInsertedEl.innerHTML = `<span style="font-size: 12px; color: #94a3b8;">${translations[currentLang].no_money_inserted}</span>`;
+        } else {
+          visualInsertedEl.innerHTML = senaraiWangDiterima.map(nilai => {
+            const imgSrc = dapatkanImejWang(nilai);
+            return `<img src="${imgSrc}" alt="RM${nilai}" class="money-note-img" onerror="this.src='https://via.placeholder.com/90x45/0284c7/ffffff?text=RM${nilai}'">`;
+          }).join('');
+        }
+      }
+
+      const liveBox = document.getElementById('live-change-box');
+      const visualChangeEl = document.getElementById('visual-change-money');
+      const bakiSemasa = jumlahBayaran - finalTotal;
+
+      if (finalTotal === 0 && troli.length === 0) {
+        liveBox.className = "change-live-box";
+        liveBox.innerText = currentLang === 'en' ? "Change: RM 0" : "Baki: RM 0";
+        if (modVisualWang === 'visual') visualChangeEl.innerHTML = `<span style="font-size: 12px; color: #94a3b8;">${translations[currentLang].no_change}</span>`;
+      } else if (jumlahBayaran < finalTotal) {
+        liveBox.className = "change-live-box insufficient";
+        liveBox.innerText = currentLang === 'en' ? `Shortage: RM ${Math.abs(bakiSemasa)}` : `Wang Kurang: RM ${Math.abs(bakiSemasa)}`;
+        if (modVisualWang === 'visual') visualChangeEl.innerHTML = `<span style="font-size: 12px; color: #dc2626; font-weight: bold;">${currentLang === 'en' ? 'Please add RM' : 'Sila tambah RM'} ${Math.abs(bakiSemasa)} ${currentLang === 'en' ? 'more' : 'lagi'}</span>`;
+      } else {
+        liveBox.className = "change-live-box sufficient";
+        liveBox.innerText = currentLang === 'en' ? `Change Returned: RM ${bakiSemasa} 🎉` : `Baki Pulangan: RM ${bakiSemasa} 🎉`;
+        if (modVisualWang === 'visual') visualChangeEl.innerHTML = janaHTMLVisualWang(bakiSemasa);
+      }
+
+      hantarDataKeCustomerDisplay(false);
+    }
+
+    function tambahWang(nilai) {
+      playKeypadSound();
+      jumlahBayaran += nilai;
+      senaraiWangDiterima.push(nilai);
+      sebutAyat(currentLang === 'en' ? `${nomborKePerkataan(nilai)} ringgit` : `${nomborKePerkataan(nilai)} ringgit`);
+      kemaskiniUI();
+    }
+
+    function resetBayaranSahaja() {
+      jumlahBayaran = 0;
+      senaraiWangDiterima = [];
+      kemaskiniUI();
+    }
+
+    function tunjukAmaran(tajuk, sub, kekutanganText) {
+      playWarningSound();
+      document.getElementById('warning-title').innerText = tajuk;
+      document.getElementById('warning-subtitle').innerText = sub;
+      
+      const contentCard = document.getElementById('warning-content');
+      if (kekutanganText) {
+        contentCard.style.display = 'block';
+        document.getElementById('warning-lack-val').innerText = kekutanganText;
+      } else {
+        contentCard.style.display = 'none';
+      }
+
+      document.getElementById('warningModal').style.display = 'flex';
+    }
+
+    function tutupAmaran() {
+      document.getElementById('warningModal').style.display = 'none';
+    }
+
+    function prosesBayaran() {
+      playKeypadSound();
+      const finalTotal = Math.max(0, jumlahHarga);
+
+      if (troli.length === 0) {
+        tunjukAmaran(currentLang === 'en' ? "🛒 CART IS EMPTY!" : "🛒 TROLI KOSONG!", currentLang === 'en' ? "Please scan or select items first!" : "Sila imbas atau pilih barang terlebih dahulu!", "");
+        sebutAyat(currentLang === 'en' ? "Cart is empty. Please select items first." : "Troli kosong. Sila pilih barang terlebih dahulu.");
+        return;
+      }
+
+      if (modPembelajaran === 'mudah') {
+        if (jumlahBayaran < finalTotal) {
+          const kekurangan = finalTotal - jumlahBayaran;
+          tunjukAmaran(currentLang === 'en' ? "💵 INSUFFICIENT MONEY!" : "💵 WANG TIDAK CUKUP!", currentLang === 'en' ? "In Exact Money Mode, please insert the exact amount." : "Di Mod Mudah, sila masukkan duit yang TEPAT.", currentLang === 'en' ? `Short RM ${kekurangan}` : `Kurang RM ${kekurangan}`);
+          sebutAyat(currentLang === 'en' ? `Money is insufficient. Please add ${nomborKePerkataan(kekurangan)} ringgit more.` : `Wang tidak cukup. Sila tambah ${nomborKePerkataan(kekurangan)} ringgit lagi.`);
+          return;
+        } else if (jumlahBayaran > finalTotal) {
+          const terlebih = jumlahBayaran - finalTotal;
+          tunjukAmaran(currentLang === 'en' ? "🌱 EXACT MONEY MODE" : "🌱 MOD MUDAH (WANG TEPAT)", currentLang === 'en' ? `You inserted RM ${terlebih} extra! In Exact Money Mode, please pay the exact amount (RM ${finalTotal}).` : `Wang anda terlebih RM ${terlebih}! Dalam Mod Mudah, sila bayar jumlah WANG TEPAT (RM ${finalTotal}) sahaja.`, "");
+          sebutAyat(currentLang === 'en' ? `In exact money mode, please pay the exact amount of ${nomborKePerkataan(finalTotal)} ringgit. You gave ${nomborKePerkataan(terlebih)} ringgit extra.` : `Dalam mod mudah, sila bayar wang yang tepat iaitu ${nomborKePerkataan(finalTotal)} ringgit sahaja. Duit anda terlebih ${nomborKePerkataan(terlebih)} ringgit.`);
+          return;
+        }
+      } else {
+        if (jumlahBayaran < finalTotal) {
+          const kekurangan = finalTotal - jumlahBayaran;
+          tunjukAmaran(currentLang === 'en' ? "💵 INSUFFICIENT MONEY!" : "💵 WANG TIDAK CUKUP!", currentLang === 'en' ? "Please insert more money to complete payment." : "Sila masukkan duit lagi untuk buat pembayaran.", `RM ${kekurangan}`);
+          sebutAyat(currentLang === 'en' ? `Money is insufficient. Please add ${nomborKePerkataan(kekurangan)} ringgit more.` : `Wang tidak cukup. Sila tambah ${nomborKePerkataan(kekurangan)} ringgit lagi.`);
+          return;
+        }
+      }
+
+      troli.forEach(cartItem => {
+        const p = produkList.find(prod => prod.id === cartItem.id);
+        if (p) {
+          p.stok = Math.max(0, p.stok - cartItem.kuantiti);
+        }
+      });
+
+      localStorage.setItem('smart_cilik_stok_v6', JSON.stringify(produkList));
+
+      playReceiptSound();
+      const baki = jumlahBayaran - finalTotal;
+      const totalUnits = troli.reduce((sum, item) => sum + item.kuantiti, 0);
+
+      let summaryHTML = `<div style="margin-bottom:8px;">🛒 <b>${currentLang === 'en' ? 'Total Units:' : 'Jumlah Unit:'}</b> ${totalUnits} unit/kupon</div>`;
+      summaryHTML += `<ul style="margin: 5px 0; padding-left: 18px;">`;
+      
+      troli.forEach(item => {
+        const itemTotal = item.harga * item.kuantiti;
+        const hargaText = item.isCoupon ? `-RM ${Math.abs(itemTotal)}` : `RM ${itemTotal}`;
+        summaryHTML += `<li>${item.nama} x${item.kuantiti} = <b>${hargaText}</b></li>`;
+      });
+      
+      summaryHTML += `</ul>`;
+      summaryHTML += `<hr style="border: 0; border-top: 1px dashed #cbd5e1; margin: 8px 0;">`;
+      summaryHTML += `<div>💰 <b>${currentLang === 'en' ? 'Total to Pay:' : 'Jumlah Perlu Dibayar:'}</b> RM ${finalTotal}</div>`;
+      summaryHTML += `<div>💵 <b>${currentLang === 'en' ? 'Money Received:' : 'Wang Diterima:'}</b> RM ${jumlahBayaran}</div>`;
+
+      document.getElementById('receipt-summary').innerHTML = summaryHTML;
+      document.getElementById('modal-baki-val').innerText = `RM ${baki}`;
+      
+      const visualHtml = janaHTMLVisualWang(baki);
+      document.getElementById('modal-visual-baki').innerHTML = visualHtml;
+
+      hantarDataKeCustomerDisplay(true, baki, visualHtml);
+
+      document.getElementById('receiptModal').style.display = 'flex';
+      
+      if (baki === 0) {
+        sebutAyat(currentLang === 'en' ? "Payment successful! Great job, exact amount! Thank you!" : "Pembayaran berjaya! Syabas, wang anda tepat! Terima kasih!");
+      } else {
+        sebutAyat(currentLang === 'en' ? `Payment successful! Your change is ${nomborKePerkataan(baki)} ringgit. Thank you!` : `Pembayaran berjaya! Baki wang anda ialah ${nomborKePerkataan(baki)} ringgit. Terima kasih!`);
+      }
+
+      binaKatalogUI();
+    }
+
+    function tutupResit() {
+      document.getElementById('receiptModal').style.display = 'none';
+      resetSemua();
+      bukaPageKedai();
+    }
+
+    function resetSemua() {
+      troli = [];
+      jumlahHarga = 0;
+      jumlahBayaran = 0;
+      senaraiWangDiterima = [];
+      kemaskiniUI();
+    }
+
+    function binaSettingStockUI() {
+      const tbody = document.getElementById('setting-stock-list');
+      tbody.innerHTML = "";
+
+      produkList.forEach((item, index) => {
+        tbody.innerHTML += `
+          <tr>
+            <td style="font-weight: bold; text-align: left;">
+              <img src="${item.img}" style="width: 22px; height: 22px; vertical-align: middle; margin-right: 4px;" onerror="this.src='https://cdn-icons-png.flaticon.com/512/726/726476.png'">
+              ${item.nama}
+            </td>
+            <td>RM ${item.harga}</td>
+            <td>
+              <div style="display: flex; align-items: center; justify-content: center; gap: 4px;">
+                <button class="btn-qty-control" onclick="ubahStok(${index}, -1)">-</button>
+                <input type="number" class="input-stock" value="${item.stok}" onchange="setStokKekal(${index}, this.value)">
+                <button class="btn-qty-control" onclick="ubahStok(${index}, 1)">+</button>
+              </div>
+            </td>
+          </tr>
+        `;
+      });
+    }
+
+    function ubahStok(index, delta) {
+      playKeypadSound();
+      produkList[index].stok = Math.max(0, produkList[index].stok + delta);
+      binaSettingStockUI();
+    }
+
+    function setStokKekal(index, val) {
+      const num = parseInt(val) || 0;
+      produkList[index].stok = Math.max(0, num);
+      binaSettingStockUI();
+    }
+
+    function resetSemuaStokKe10() {
+      produkList.forEach(item => item.stok = 10);
+      binaSettingStockUI();
+      sebutAyat(currentLang === 'en' ? "All stocks reset to 10 units." : "Semua stok telah direset ke 10 unit.");
+      tunjukAmaran(currentLang === 'en' ? "🔄 STOCK RESET" : "🔄 STOK DIRESET", currentLang === 'en' ? "All stock items returned to 10 units." : "Semua item stok telah dikembalikan ke 10 unit.", "");
+    }
+
+    function tambahProdukBaharu() {
+      playKeypadSound();
+      const nama = document.getElementById('new-name').value.trim();
+      const barcode = document.getElementById('new-barcode').value.trim();
+      const harga = parseInt(document.getElementById('new-price').value);
+      const stok = parseInt(document.getElementById('new-stock').value) || 10;
+
+      if (!nama || !barcode || isNaN(harga)) {
+        tunjukAmaran(currentLang === 'en' ? "⚠️ INCOMPLETE FORM" : "⚠️ BORANG TAK LENGKAP", currentLang === 'en' ? "Please fill in Item Name, Barcode and Price correctly." : "Sila isi Nama, Kod Bar dan Harga dengan betul.", "");
+        return;
+      }
+
+      if (produkList.some(p => p.id === barcode)) {
+        tunjukAmaran(currentLang === 'en' ? "⚠️ BARCODE EXISTS" : "⚠️ KOD BAR WUJUD", currentLang === 'en' ? `Barcode [${barcode}] is already used by another item!` : `Kod bar [${barcode}] telah digunakan oleh produk lain!`, "");
+        return;
+      }
+
+      const isCoupon = harga < 0;
+
+      produkList.push({
+        id: barcode,
+        nama: nama,
+        harga: harga,
+        stok: stok,
+        img: isCoupon ? "kupon1.png" : "gula.png",
+        isCoupon: isCoupon
+      });
+
+      document.getElementById('new-name').value = "";
+      document.getElementById('new-barcode').value = "";
+      document.getElementById('new-price').value = "";
+      document.getElementById('new-stock').value = "10";
+
+      binaSettingStockUI();
+      sebutAyat(currentLang === 'en' ? `Product ${nama} added successfully.` : `Produk ${nama} berjaya ditambah.`);
+      tunjukAmaran(currentLang === 'en' ? "✅ SUCCESS" : "✅ BERJAYA", currentLang === 'en' ? `Product ${nama} has been registered.` : `Produk ${nama} telah didaftarkan ke dalam sistem.`, "");
+    }
+
+    function simpanDanKembali() {
+      localStorage.setItem('smart_cilik_stok_v6', JSON.stringify(produkList));
+      binaKatalogUI();
+      kemaskiniUI();
+      bukaPageKedai();
+      sebutAyat(currentLang === 'en' ? "Settings saved." : "Tetapan disimpan.");
+    }
+
+    function bukaSkrinCetakBarcode() {
+      const screen = document.getElementById('printable-barcode-screen');
+      const container = document.getElementById('printable-grid-container');
+      container.innerHTML = "";
+
+      produkList.forEach(item => {
+        const priceLabel = item.isCoupon ? `-RM ${Math.abs(item.harga)}` : `RM ${item.harga}`;
+        container.innerHTML += `
+          <div class="print-card">
+            <h3 style="margin: 0 0 5px 0; color: #0284c7;">${item.nama}</h3>
+            <div style="font-weight: bold; margin-bottom: 8px; color: #16a34a;">${currentLang === 'en' ? 'Price:' : 'Harga:'} ${priceLabel}</div>
+            <div style="background: white; padding: 6px; border-radius: 8px;">
+              <svg id="print-bc-${item.id}"></svg>
+            </div>
+          </div>
+        `;
+      });
+
+      screen.style.display = 'block';
+
+      setTimeout(() => {
+        produkList.forEach(item => {
+          JsBarcode(`#print-bc-${item.id}`, item.id, {
+            format: "CODE128",
+            width: 1.5,
+            height: 45,
+            displayValue: true,
+            fontSize: 14,
+            margin: 4
+          });
+        });
+      }, 100);
+    }
+
+    function tutupSkrinCetakBarcode() {
+      document.getElementById('printable-barcode-screen').style.display = 'none';
+    }
+
+    function toggleCamera() {
+      const readerEl = document.getElementById('reader');
+      const switchBtn = document.getElementById('switchBtn');
+      const camBtn = document.getElementById('camBtn');
+
+      if (cameraActive) {
+        if (html5QrCode) {
+          html5QrCode.stop().then(() => {
+            readerEl.style.display = 'none';
+            switchBtn.style.display = 'none';
+            camBtn.innerText = currentLang === 'en' ? "📷 Open Gadget Camera" : "📷 Buka Kamera Gajet";
+            cameraActive = false;
+          });
+        }
+      } else {
+        readerEl.style.display = 'block';
+        html5QrCode = new Html5Qrcode("reader");
+
+        Html5Qrcode.getCameras().then(devices => {
+          if (devices && devices.length > 0) {
+            availableCameras = devices;
+            if (devices.length > 1) switchBtn.style.display = 'block';
+
+            let backCamIndex = devices.findIndex(d => d.label.toLowerCase().includes('back') || d.label.toLowerCase().includes('rear') || d.label.toLowerCase().includes('belakang'));
+            currentCameraIndex = backCamIndex !== -1 ? backCamIndex : 0;
+
+            mulaKameraImbas(availableCameras[currentCameraIndex].id);
+          } else {
+            tunjukAmaran(currentLang === 'en' ? "📷 NO CAMERA" : "📷 KAMERA TIADA", currentLang === 'en' ? "No camera found on this device." : "Kamera tidak ditemui pada gajet ini.", "");
+          }
+        }).catch(err => {
+          tunjukAmaran(currentLang === 'en' ? "📷 CAMERA ACCESS" : "📷 AKSES KANERA", currentLang === 'en' ? "Please allow browser camera access." : "Sila benarkan akses kamera browser gajet anda.", "");
+        });
+      }
+    }
+
+    function mulaKameraImbas(cameraId) {
+      const camBtn = document.getElementById('camBtn');
+      html5QrCode.start(
+        cameraId, 
+        { fps: 10, qrbox: { width: 220, height: 180 } },
+        (decodedText) => {
+          const now = Date.now();
+          if (decodedText !== lastScannedCode || (now - lastScanTime) > 2000) {
+            lastScannedCode = decodedText;
+            lastScanTime = now;
+            prosesKodBar(decodedText);
+          }
+        },
+        (errorMessage) => {}
+      ).then(() => {
+        cameraActive = true;
+        camBtn.innerText = currentLang === 'en' ? "🔴 Close Gadget Camera" : "🔴 Tutup Kamera Gajet";
+      });
+    }
+
+    function tukarKameraNext() {
+      if (availableCameras.length > 1 && html5QrCode) {
+        html5QrCode.stop().then(() => {
+          currentCameraIndex = (currentCameraIndex + 1) % availableCameras.length;
+          mulaKameraImbas(availableCameras[currentCameraIndex].id);
+        });
+      }
+    }
+
+    tukarBahasa(currentLang);
+  </script>
+</body>
+</html>
