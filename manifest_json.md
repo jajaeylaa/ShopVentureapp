@@ -1,0 +1,25 @@
+{
+"name": "Smart Cilik Market",
+"short_name": "CilikMarket",
+"description": "Aplikasi Pembelajaran Matematik & Kasir Pintar Smart Cilik Market",
+"start_url": "./index.html",
+"display": "standalone",
+"background_color": "#e0f2fe",
+"theme_color": "#0284c7",
+"orientation": "any",
+"scope": "./",
+"icons": \[
+{
+"src": "icon.png",
+"sizes": "192x192",
+"type": "image/png",
+"purpose": "any maskable"
+},
+{
+"src": "icon.png",
+"sizes": "512x512",
+"type": "image/png",
+"purpose": "any maskable"
+}
+\]
+}
